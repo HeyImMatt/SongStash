@@ -18,9 +18,10 @@ Potential Issues:
 
 ###Database Schema
 
+
 ###Sensitive Information
 
-* Usernames
+* Email addresses
 * Passwords
 * Personal song lyrics
 
@@ -32,9 +33,6 @@ Potential Issues:
 * Users can add songs found in MusixMatch search to song stashes
 * Users can create their own songs to add to song stashes
 * Users can add blur or blocks to cover sections of lyrics they are trying to memorize
-
-###User Flow
-
 
 ###Beyond CRUD Feature(s)
 
