@@ -17,7 +17,7 @@ Potential Issues:
 * Free plan only offers access to 30% of song lyrics.
 
 ###Database Schema
-
+![DB schema design](https://github.com/HeyImMatt/SongStash/blob/master/SongStash-db-schema-v1.jpg?raw=true)
 
 ###Sensitive Information
 
