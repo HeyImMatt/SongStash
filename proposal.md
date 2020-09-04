@@ -43,6 +43,7 @@ Potential Issues:
 
 ### Stretch Goals
 
+* Encrypted storage of lyrics and annotations for user-added songs to protect IP and potential copyright issues
 * Display guitar chord formations
 * Autoscroll if the lyrics run off the page
 * Zoom or enlarge text
