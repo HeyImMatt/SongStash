@@ -67,9 +67,9 @@ class User(db.Model):
         db.session.add(user)
         return user
 
-#########
-# Association Tables
-#########
+######################
+# Association Tables #
+######################
 
 class SongAnnotation(db.Model):
     """Mapping of annotations to a song"""
@@ -97,4 +97,3 @@ class UserSong(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
-    
