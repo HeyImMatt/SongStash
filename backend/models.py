@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-class Annotations(db.Model):
+class Annotation(db.Model):
     """User-added song annotations"""
 
     __tablename__ = 'annotations'
@@ -15,8 +15,8 @@ class Annotations(db.Model):
     db.ForeignKey('users.id')
     db.ForeignKey('songs.id')
 
-class Songs(db.Model):
-    """Songs"""
+class Song(db.Model):
+    """Song Model"""
 
     __tablename__ = 'songs'
 
@@ -26,8 +26,8 @@ class Songs(db.Model):
     lyrics = db.Column(db.Text, nullable=False)
     db.ForeignKey('users.id')
 
-class Stashes(db.Model):
-    """Stashes"""
+class Stash(db.Model):
+    """Stash Model"""
 
     __tablename__ = 'stashes'
 
@@ -35,7 +35,7 @@ class Stashes(db.Model):
     name = db.Column(db.Text, nullable=False)
     db.ForeignKey('users.id')
 
-class Users(db.Model):
+class User(db.Model):
     """System User"""
 
     __tablename__ = 'users'
