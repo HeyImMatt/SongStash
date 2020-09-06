@@ -24,10 +24,7 @@ class Song(db.Model):
     title = db.Column(db.Text, nullable=False)
     artist = db.Column(db.Text, nullable=False)
     lyrics = db.Column(db.Text, nullable=False)
-    user_song = db.Column(db.Boolean, nullable=False, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    annotations = db.relationship('Annotation')
 
 class Stash(db.Model):
     """Stash Model"""
@@ -38,16 +35,16 @@ class Stash(db.Model):
     name = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    songs = db.relationship('StashSong', backref='stash')
+    songs = db.relationship('Song', secondary='stashes_songs')
 
 class StashSong(db.Model):
-    """Relationship between stashes and songs"""
+    """Mapping of a song to a stash"""
 
-    __tablename__ = stashes_songs
+    __tablename__ = 'stashes_songs'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'))
+    stash_id = db.Column(db.Integer, db.ForeignKey('stashes.id'))
 
 class User(db.Model):
     """System User"""
