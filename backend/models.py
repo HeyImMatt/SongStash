@@ -4,6 +4,17 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
+class Annotations(db.Model):
+    """User-added song annotations"""
+
+    __tablename__ = 'annotations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    annotation = db.Column(db.Text, nullable=False)
+    lyric_index = db.Column(db.Integer, nullable=False)
+    db.ForeignKey('users.id')
+    db.ForeignKey('songs.id')
+
 class Users(db.Model):
     """System User"""
 
