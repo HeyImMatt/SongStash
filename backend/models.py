@@ -15,6 +15,26 @@ class Annotations(db.Model):
     db.ForeignKey('users.id')
     db.ForeignKey('songs.id')
 
+class Songs(db.Model):
+    """Songs"""
+
+    __tablename__ = 'songs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text, nullable=False)
+    artist = db.Column(db.Text, nullable=False)
+    lyrics = db.Column(db.Text, nullable=False)
+    db.ForeignKey('users.id')
+
+class Stashes(db.Model):
+    """Stashes"""
+
+    __tablename__ = 'stashes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, nullable=False)
+    db.ForeignKey('users.id')
+
 class Users(db.Model):
     """System User"""
 
