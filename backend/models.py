@@ -4,22 +4,14 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-db.create_all()
-
-def connect_db(app):
-    """Connect to database"""
-
-    db.app = app
-    db.init_app(app)
-
-class Users(db.model):
+class Users(db.Model):
     """System User"""
 
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text(20), nullable=False, unique=True)
-    password = db.Columns(db.Text, nullable=False)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    password = db.Column(db.Text, nullable=False)
 
     @classmethod
     def signup(cls, username, password):
@@ -31,3 +23,9 @@ class Users(db.model):
 
         db.session.add(user)
         return user
+
+def connect_db(app):
+    """Connect to database"""
+
+    db.app = app
+    db.init_app(app)
