@@ -40,9 +40,9 @@ def do_logout():
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
 
-################################
-# Routes & UI Handled by Flask #
-################################
+###########################################
+# Login & Signup plus UI Handled by Flask #
+###########################################
 
 @app.route('/')
 def home_route():
@@ -103,12 +103,13 @@ def logout():
 def get_user_songs_stashes_info(user_id):
     """Main GET route to return user's stashes and songs"""
 
-    if g.user.id == user_id:
+    if g.user and g.user.id == user_id:
         user = User.query.get_or_404(user_id)
 
         data = {
           "id": user.id,
-          "songs": user.songs
+          "songs": user.songs,
+          "stashes": user.stashes
         }
         return jsonify(data), 200
     
