@@ -123,7 +123,7 @@ def get_user_songs_stashes_info(user_id):
 
 @app.route('/api/stashes', methods=['POST'])
 def add_stash():
-    """Creates a stash"""
+    """Creates a stash and UserStash association"""
 
     #Add g.user check when testing complete
 
@@ -134,7 +134,7 @@ def add_stash():
 
     try: 
         db.session.commit()
-        us = UserStash.create_user_stash(stash.id, user_id)
+        user_stash = UserStash.create_user_stash(stash.id, user_id)
         return jsonify({"stash_id": stash.id}, 201)
     
     except:
@@ -146,7 +146,7 @@ def add_stash():
 
 @app.route('/api/songs', methods=['POST'])
 def add_song():
-    """Creates a song"""
+    """Creates a song and UserSong association"""
 
     #Add g.user check when testing complete
 
@@ -159,6 +159,7 @@ def add_song():
 
     try: 
         db.session.commit()
+        user_song = UserSong.create_user_song(song.id, user_id)
         return jsonify({"song_id": song.id}, 201)
     
     except:

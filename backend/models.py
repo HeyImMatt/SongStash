@@ -148,3 +148,10 @@ class UserSong(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
+
+    @classmethod
+    def create_user_song(cls, song_id, user_id):
+        user_song = UserSong(song_id=song_id, user_id=user_id)
+        db.session.add(user_song)
+        db.session.commit()
+        return user_song
