@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, flash, render_template, session, g, jsonify
 from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError
-from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong
+from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong, UserStash
 from forms import UserSignupForm, UserLoginForm
 from env_vars import SQLALCHEMY_DATABASE_URI, SECRET_KEY
 
@@ -134,6 +134,7 @@ def add_stash():
 
     try: 
         db.session.commit()
+        us = UserStash.create_user_stash(stash.id, user_id)
         return jsonify({"stash_id": stash.id}, 201)
     
     except:

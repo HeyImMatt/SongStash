@@ -133,6 +133,13 @@ class UserStash(db.Model):
     stash_id = db.Column(db.Integer, db.ForeignKey('stashes.id', ondelete='cascade'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
+    @classmethod
+    def create_user_stash(cls, stash_id, user_id):
+        user_stash = UserStash(stash_id=stash_id, user_id=user_id)
+        db.session.add(user_stash)
+        db.session.commit()
+        return user_stash
+
 class UserSong(db.Model):
     """Mapping of a songs to users"""
 
