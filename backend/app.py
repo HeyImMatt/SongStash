@@ -1,7 +1,6 @@
 from flask import Flask, request, redirect, flash, render_template, session, g, jsonify
 from sqlalchemy.exc import IntegrityError
-from flask_login import current_user, login_user
-from models import db, connect_db, connect_login, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong
+from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong
 from forms import UserSignupForm, UserLoginForm
 from env_vars import SQLALCHEMY_DATABASE_URI, SECRET_KEY
 
@@ -15,7 +14,6 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = SECRET_KEY
 
 connect_db(app)
-connect_login(app)
 
 # db.drop_all()
 # db.create_all()
@@ -36,12 +34,15 @@ def do_login(user):
 
     session[CURR_USER_KEY] = user.id
 
-
 def do_logout():
     """Logout user."""
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+
+################################
+# Routes & UI Handled by Flask #
+################################
 
 @app.route('/')
 def home_route():
