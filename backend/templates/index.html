@@ -2,6 +2,20 @@
 
 {% block content %}
 <h1>Welcome to SongStash</h1>
-<h3>Login or Signup for an Account</h3>
+<h3>Login or <a href="/signup">Signup for an Account</a></h3>
+
+<form method="POST" action="/login" id="user-login-form">
+  {{ form.hidden_tag() }}
+
+  {% for field in form if field.widget.input_type != 'hidden' %}
+    {% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    {{  field.label }}
+    {{ field(class="form-control") }}
+  {% endfor %}
+
+  <button class="btn btn-primary btn-lg btn-block">Login</button>
+</form>
 
 {% endblock %}

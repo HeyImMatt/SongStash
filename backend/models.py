@@ -1,14 +1,23 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+login = LoginManager()
 
 def connect_db(app):
     """Connect to database"""
 
     db.app = app
     db.init_app(app)
+
+def connect_login(app):
+    """Connect app to Flask login"""
+    
+    login.app = app
+    login.init_app(app)
+
 
 class Annotation(db.Model):
     """User-added song annotations"""
@@ -45,7 +54,7 @@ class Stash(db.Model):
 
     songs = db.relationship('Song', secondary='stashes_songs')
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     """System User"""
 
     __tablename__ = 'users'
@@ -55,6 +64,10 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
 
     songs = db.relationship('Song', secondary='users_songs')
+
+    @login.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     @classmethod
     def signup(cls, username, password):
@@ -66,6 +79,20 @@ class User(db.Model):
 
         db.session.add(user)
         return user
+    
+    @classmethod
+    def authenticate(cls, username, password):
+        """Authenticate User"""
+
+        user = cls.query.filter_by(username=username.lower()).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+
+        return False
+
 
 ######################
 # Association Tables #

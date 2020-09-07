@@ -17,3 +17,17 @@ class UserSignupForm(FlaskForm):
                   EqualTo('confirm', message='Passwords must match')
                   ])
     confirm = PasswordField('Confirm Password')
+
+class UserLoginForm(FlaskForm):
+    """Form for logging in users"""
+
+    username = StringField('Username', 
+                validators=[
+                  DataRequired(), 
+                  Length(min=3, max=20, message='Username must be at 3-20 characters long'),
+                  Regexp('^\w+$', message='Username can only be alphanumeric characters')
+                  ])
+    password = PasswordField('Password', 
+                validators=[
+                  DataRequired(),
+                  ])
