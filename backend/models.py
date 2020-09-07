@@ -64,6 +64,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.Text, nullable=False)
 
     songs = db.relationship('Song', secondary='users_songs')
+    stashes = songs = db.relationship('Stash', secondary='users_stashes')
 
     @login.user_loader
     def load_user(id):
@@ -99,7 +100,7 @@ class User(UserMixin, db.Model):
 ######################
 
 class SongAnnotation(db.Model):
-    """Mapping of annotations to a song"""
+    """Mapping of annotations to a songs"""
 
     __tablename__ = 'songs_annotations'
 
@@ -108,7 +109,7 @@ class SongAnnotation(db.Model):
     annotation_id = db.Column(db.Integer, db.ForeignKey('annotations.id', ondelete='cascade'))
 
 class StashSong(db.Model):
-    """Mapping of a song to a stash"""
+    """Mapping of a songs to stashes"""
 
     __tablename__ = 'stashes_songs'
 
@@ -116,8 +117,17 @@ class StashSong(db.Model):
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
     stash_id = db.Column(db.Integer, db.ForeignKey('stashes.id', ondelete='cascade'))
 
+class UserStash(db.Model):
+    """Mapping of stashes to users"""
+
+    __tablename__ = 'users_stashes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    stash_id = db.Column(db.Integer, db.ForeignKey('stashes.id', ondelete='cascade'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
+
 class UserSong(db.Model):
-    """Mapping of a song to a user"""
+    """Mapping of a songs to users"""
 
     __tablename__ = 'users_songs'
 
