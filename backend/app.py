@@ -1,4 +1,5 @@
 from flask import Flask, request, redirect, flash, render_template, session, g, jsonify
+from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong
 from forms import UserSignupForm, UserLoginForm
@@ -7,6 +8,7 @@ from env_vars import SQLALCHEMY_DATABASE_URI, SECRET_KEY
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
