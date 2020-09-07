@@ -164,3 +164,27 @@ def add_song():
         return jsonify({"message":"Error adding song"}, 400)
     
     return 400
+
+### Annotation Routes ###
+
+@app.route('/api/annotations', methods=['POST'])
+def add_annotation():
+    """Creates an annotation"""
+
+    #Add g.user check when testing complete
+
+    annotation = request.json['annotation']
+    lyric_index = request.json['lyric_index']
+    user_id = int(request.json['user_id'])
+    song_id = int(request.json['song_id'])
+    
+    annotation = Annotation.create_annotation(annotation, lyric_index, user_id, song_id)
+
+    try: 
+        db.session.commit()
+        return jsonify({"annotation_id": annotation.id}, 201)
+    
+    except:
+        return jsonify({"message":"Error adding annotation"}, 400)
+    
+    return 400

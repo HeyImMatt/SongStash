@@ -21,6 +21,13 @@ class Annotation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
 
+    @classmethod
+    def create_annotation(cls, annotation, lyric_index, user_id, song_id):
+        annotation = Annotation(annotation=annotation, lyric_index=lyric_index, user_id=user_id, song_id=song_id)
+        db.session.add(annotation)
+
+        return annotation
+
 class Song(db.Model):
     """Song Model"""
 
