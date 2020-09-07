@@ -34,6 +34,13 @@ class Song(db.Model):
 
     annotations = db.relationship('Annotation', secondary='songs_annotations')
 
+    @classmethod
+    def create_song(cls, title, artist, lyrics, user_id):
+        song = Song(title=title, artist=artist, lyrics=lyrics, user_id=user_id)
+        db.session.add(song)
+
+        return song
+
 class Stash(db.Model):
     """Stash Model"""
 

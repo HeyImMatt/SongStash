@@ -101,6 +101,8 @@ def logout():
 # API Routes #
 ##############
 
+### User Routes ###
+
 @app.route('/api/users/<int:user_id>', methods=['GET'])
 def get_user_songs_stashes_info(user_id):
     """Main GET route to return user's stashes and songs"""
@@ -117,9 +119,13 @@ def get_user_songs_stashes_info(user_id):
     
     return jsonify({"message":"Unauthorized"}), 401
 
+### Stash Routes ###    
+
 @app.route('/api/stashes', methods=['POST'])
 def add_stash():
     """Creates a stash"""
+
+    #Add g.user check when testing complete
 
     name = request.json['name']
     user_id = int(request.json['user_id'])
@@ -132,5 +138,29 @@ def add_stash():
     
     except:
         return jsonify({"message":"Error adding stash"}, 400)
+    
+    return 400
+
+### Song Routes ###
+
+@app.route('/api/songs', methods=['POST'])
+def add_song():
+    """Creates a song"""
+
+    #Add g.user check when testing complete
+
+    title = request.json['title']
+    artist = request.json['artist']
+    lyrics = request.json['lyrics']
+    user_id = int(request.json['user_id'])
+    
+    song = Song.create_song(title, artist, lyrics, user_id)
+
+    try: 
+        db.session.commit()
+        return jsonify({"song_id": song.id}, 201)
+    
+    except:
+        return jsonify({"message":"Error adding song"}, 400)
     
     return 400
