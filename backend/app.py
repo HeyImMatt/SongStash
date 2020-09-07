@@ -92,3 +92,22 @@ def logout():
 
     # flash("You have successfully logged out.", 'success')
     return redirect("/")
+
+##############
+# API Routes #
+##############
+
+@app.route('/api/users/<int:user_id>', methods=['GET'])
+def get_user_songs_stashes_info(user_id):
+    """Main GET route to return user's stashes and songs"""
+
+    if g.user.id == user_id:
+        user = User.query.get_or_404(user_id)
+
+        data = {
+          "id": user.id,
+          "songs": user.songs
+        }
+        return jsonify(data), 200
+    
+    return jsonify({"message":"Unauthorized"}), 401

@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.Text, nullable=False)
 
     songs = db.relationship('Song', secondary='users_songs')
-    stashes = songs = db.relationship('Stash', secondary='users_stashes')
+    stashes = db.relationship('Stash', secondary='users_stashes')
 
     @login.user_loader
     def load_user(id):
