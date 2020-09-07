@@ -116,3 +116,21 @@ def get_user_songs_stashes_info(user_id):
         return jsonify(data), 200
     
     return jsonify({"message":"Unauthorized"}), 401
+
+@app.route('/api/stashes', methods=['POST'])
+def add_stash():
+    """Creates a stash"""
+
+    name = request.json['name']
+    user_id = int(request.json['user_id'])
+    
+    stash = Stash.create_stash(name, user_id)
+
+    try: 
+        db.session.commit()
+        return jsonify({"stash_id": stash.id}, 201)
+    
+    except:
+        return jsonify({"message":"Error adding stash"}, 400)
+    
+    return 400

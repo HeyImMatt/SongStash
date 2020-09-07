@@ -45,6 +45,13 @@ class Stash(db.Model):
 
     songs = db.relationship('Song', secondary='stashes_songs')
 
+    @classmethod
+    def create_stash(cls, name, user_id):
+        stash = Stash(name=name, user_id=user_id)
+        db.session.add(stash)
+
+        return stash
+
 class User(db.Model):
     """System User"""
 
@@ -62,11 +69,9 @@ class User(db.Model):
         """Signup a new user"""
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-
         user = User(username=username, password=hashed_pwd)
-
         db.session.add(user)
-        
+
         return user
     
     @classmethod
