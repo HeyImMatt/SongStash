@@ -61,7 +61,8 @@ def user_signup():
                 password=form.password.data
             )
             db.session.commit()
-            return 'Account Created'
+            do_login(user)
+            return redirect('/')
 
         except IntegrityError as e:
             flash("Username already taken", 'danger')
