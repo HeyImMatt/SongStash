@@ -112,8 +112,15 @@ class SongAnnotation(db.Model):
     __tablename__ = 'songs_annotations'
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
     annotation_id = db.Column(db.Integer, db.ForeignKey('annotations.id', ondelete='cascade'))
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
+
+    @classmethod
+    def create_song_annotation(cls, annotation_id, song_id):
+        song_annotation = SongAnnotation(annotation_id=annotation_id, song_id=song_id)
+        db.session.add(song_annotation)
+        db.session.commit()
+        return song_annotation
 
 class StashSong(db.Model):
     """Mapping of a songs to stashes"""

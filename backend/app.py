@@ -204,6 +204,7 @@ def add_annotation():
 
     try: 
         db.session.commit()
+        song_annotation = SongAnnotation.create_song_annotation(annotation.id, song_id)
         return jsonify({"annotation_id": annotation.id}, 201)
     
     except:
