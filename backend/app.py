@@ -168,6 +168,8 @@ def edit_stash(id):
 def delete_stash(id):
     """Delete stash route"""
 
+    #Add g.user check when testing complete
+
     stash = Stash.query.get_or_404(id)
 
     db.session.delete(stash)
@@ -245,6 +247,19 @@ def edit_song(id):
         return jsonify({"message":"Error editing song"}, 400)
     
     return 400
+
+@app.route('/api/songs/<int:id>', methods=['DELETE'])
+def delete_song(id):
+    """Delete song route"""
+
+    #Add g.user check when testing complete
+
+    song = Song.query.get_or_404(id)
+
+    db.session.delete(song)
+    db.session.commit()
+
+    return (jsonify(message="Song deleted"), 200)
 
 ### Annotation Routes ###
 
