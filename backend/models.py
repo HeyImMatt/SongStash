@@ -124,6 +124,12 @@ class StashSong(db.Model):
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id', ondelete='cascade'))
     stash_id = db.Column(db.Integer, db.ForeignKey('stashes.id', ondelete='cascade'))
 
+    @classmethod
+    def create_stash_song(cls, song_id, stash_id):
+        stash_song = StashSong(song_id=song_id, stash_id=stash_id)
+        db.session.add(stash_song)
+        return stash_song
+
 class UserStash(db.Model):
     """Mapping of stashes to users"""
 

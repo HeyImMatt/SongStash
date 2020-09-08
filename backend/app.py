@@ -142,6 +142,26 @@ def add_stash():
     
     return 400
 
+@app.route('/api/stashes/add_song', methods=['POST'])
+def add_song_to_stash():
+    """Adds a song to a stash"""
+
+    #Add g.user check when testing complete
+
+    song_id = int(request.json['song_id'])
+    stash_id = int(request.json['stash_id'])
+    
+    stash_song = StashSong.create_stash_song(song_id, stash_id)
+
+    try: 
+        db.session.commit()
+        return jsonify({"message": "Song added to stash"}, 201)
+    
+    except:
+        return jsonify({"message":"Error adding song to stash"}, 400)
+    
+    return 400
+
 ### Song Routes ###
 
 @app.route('/api/songs', methods=['POST'])
