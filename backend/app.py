@@ -87,7 +87,7 @@ def user_login():
         
         return 'Login Failed.'
     
-    return render_template('login.html')
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
