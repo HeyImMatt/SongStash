@@ -1,26 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <form method="POST" id="user-signup-form">
-    {{ form.hidden_tag() }}
-
-    {% for field in form if field.widget.input_type != 'hidden' %}
-      {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
-      {% endfor %}
-      {{  field.label }}
-      {{ field(class="form-control") }}
-    {% endfor %}
-
-    <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
-  </form>
-
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      {{ message }}
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <form method="POST" id="user-signup-form">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          <div class="form-group mt-3">
+          {{  field.label }}
+          {{ field(class="form-control") }}
+            {% for error in field.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <button class="btn btn-dark btn-lg btn-block">Sign me up!</button>
+      </form>
+    
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    </div>
+  </div>
+</div>
 
 {% endblock %}

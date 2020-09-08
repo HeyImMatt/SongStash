@@ -1,6 +1,11 @@
 .home-content {
-  height: 100vh;
-  background-image: url('/static/images/home-bg.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  background-color: rgb(249, 198, 45);
+}
+
+.btn-warning {
+  background-color: rgb(249, 198, 45);
+}
+
+#hero-img {
+  height: 600px;
 }
