@@ -209,6 +209,32 @@ def add_song():
     
     return 400
 
+@app.route('/api/songs/<int:id>', methods=['PATCH'])
+def edit_song(id):
+    """Edit Song"""
+
+    #Add g.user check and match with request user id when testing complete
+
+    song = Song.query.get_or_404(id)
+
+    title = request.json['title']
+    artist = request.json['artist']
+    lyrics = request.json['lyrics']
+    user_id = int(request.json['user_id'])
+    
+    song.title = title if title else song.title
+    song.artist = artist if artist else song.artist
+    song.lyrics = lyrics if lyrics else song.lyrics
+
+    try: 
+        db.session.commit()
+        return jsonify({"song_id": song.id}, 200)
+    
+    except:
+        return jsonify({"message":"Error editing song"}, 400)
+    
+    return 400
+
 ### Annotation Routes ###
 
 @app.route('/api/annotations', methods=['POST'])
