@@ -244,7 +244,7 @@ def add_annotation():
     #Add g.user check when testing complete
 
     annotation = request.json['annotation']
-    lyric_index = request.json['lyric_index']
+    lyric_index = int(request.json['lyric_index'])
     user_id = int(request.json['user_id'])
     song_id = int(request.json['song_id'])
     
@@ -257,5 +257,29 @@ def add_annotation():
     
     except:
         return jsonify({"message":"Error adding annotation"}, 400)
+    
+    return 400
+
+@app.route('/api/annotations/<int:id>', methods=['PATCH'])
+def edit_annotation(id):
+    """Edit Annotation"""
+
+    #Add g.user check and match with request user id when testing complete
+
+    a = Annotation.query.get_or_404(id)
+
+    annotation = request.json['annotation']
+    lyric_index = int(request.json['lyric_index'])
+    user_id = int(request.json['user_id'])
+    
+    a.annotation = annotation if annotation else a.annotation
+    a.lyric_index = lyric_index if lyric_index else a.lyric_index
+
+    try: 
+        db.session.commit()
+        return jsonify({"annotation_id": a.id}, 200)
+    
+    except:
+        return jsonify({"message":"Error editing annotation"}, 400)
     
     return 400
