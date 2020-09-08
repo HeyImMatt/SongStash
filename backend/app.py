@@ -164,6 +164,17 @@ def edit_stash(id):
     
     return 400
 
+@app.route('/api/stashes/<int:id>', methods=['DELETE'])
+def delete_stash(id):
+    """Delete stash route"""
+
+    stash = Stash.query.get_or_404(id)
+
+    db.session.delete(stash)
+    db.session.commit()
+
+    return (jsonify(message="Stash deleted"), 200)
+
 @app.route('/api/stashes/songs', methods=['POST'])
 def add_song_to_stash():
     """Adds a song to a stash"""
