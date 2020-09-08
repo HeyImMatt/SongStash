@@ -68,9 +68,9 @@ def user_signup():
 
         except IntegrityError as e:
             flash("Username already taken", 'danger')
-            return render_template('signup.html', form=form)
+            return render_template('form.html', form=form)
 
-    return render_template('signup.html', form=form)
+    return render_template('form.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
@@ -87,7 +87,7 @@ def user_login():
         
         return 'Login Failed.'
     
-    return render_template('login.html', form=form)
+    return render_template('form.html', form=form, login=True)
 
 @app.route('/logout')
 def logout():

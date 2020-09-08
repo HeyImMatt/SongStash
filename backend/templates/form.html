@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-8 mx-auto">
-      <form method="POST" id="user-signup-form">
+      <form method="POST" action={{ "/login" if login else "/signup" }}>
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
           <div class="form-group mt-3">
@@ -15,9 +15,8 @@
             {% endfor %}
           {% endfor %}
         </div>
-        <button class="btn btn-dark btn-lg btn-block">Sign me up!</button>
+        <button class="btn btn-dark btn-lg btn-block">{{ "Login" if login else "Create Account" }}</button>
       </form>
-    
       {% with messages = get_flashed_messages() %}
       {% if messages %}
         {% for message in messages %}
