@@ -309,3 +309,16 @@ def edit_annotation(id):
         return jsonify({"message":"Error editing annotation"}, 400)
     
     return 400
+
+@app.route('/api/annotations/<int:id>', methods=['DELETE'])
+def delete_annotation(id):
+    """Delete annotation route"""
+
+    #Add g.user check when testing complete
+
+    annotation = Annotation.query.get_or_404(id)
+
+    db.session.delete(annotation)
+    db.session.commit()
+
+    return (jsonify(message="Annotation deleted"), 200)
