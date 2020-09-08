@@ -48,8 +48,7 @@ def do_logout():
 
 @app.route('/')
 def home_route():
-    form = UserLoginForm()
-    return render_template('index.html', form=form)
+    return render_template('index.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def user_signup():
@@ -73,7 +72,7 @@ def user_signup():
 
     return render_template('signup.html', form=form)
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def user_login():
     """Handles User Login"""
 
@@ -87,6 +86,8 @@ def user_login():
             return 'Login Success!'
         
         return 'Login Failed.'
+    
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
@@ -185,6 +186,7 @@ def add_song_to_stash():
 
     song_id = int(request.json['song_id'])
     stash_id = int(request.json['stash_id'])
+    user_id = int(request.json['user_id'])
     
     stash_song = StashSong.create_stash_song(song_id, stash_id)
 
