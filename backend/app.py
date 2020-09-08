@@ -190,12 +190,25 @@ def add_song_to_stash():
 
     try: 
         db.session.commit()
-        return jsonify({"message": "Song added to stash"}, 201)
+        return jsonify({"stash_song_id": stash_song.id}, 201)
     
     except:
         return jsonify({"message":"Error adding song to stash"}, 400)
     
     return 400
+
+@app.route('/api/stashes/songs/<int:id>', methods=['DELETE'])
+def delete_song_from_stash(id):
+    """Delete song from stash"""
+
+    #Add g.user check when testing complete
+
+    stash_song = StashSong.query.get_or_404(id)
+
+    db.session.delete(stash_song)
+    db.session.commit()
+
+    return (jsonify(message="Song deleted from stash"), 200)
 
 ### Song Routes ###
 
