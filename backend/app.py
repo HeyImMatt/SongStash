@@ -142,7 +142,29 @@ def add_stash():
     
     return 400
 
-@app.route('/api/stashes/add_song', methods=['POST'])
+@app.route('/api/stashes/<int:id>', methods=['PATCH'])
+def edit_stash(id):
+    """Edit Stash"""
+
+    #Add g.user check and match with request user id when testing complete
+
+    stash = Stash.query.get_or_404(id)
+
+    name = request.json['name']
+    user_id = request.json['user_id']
+    
+    stash.name = name if name else stash.name
+
+    try: 
+        db.session.commit()
+        return jsonify({"stash_id": stash.id}, 200)
+    
+    except:
+        return jsonify({"message":"Error editing stash"}, 400)
+    
+    return 400
+
+@app.route('/api/stashes/songs', methods=['POST'])
 def add_song_to_stash():
     """Adds a song to a stash"""
 
