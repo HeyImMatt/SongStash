@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong, UserStash
 from forms import UserSignupForm, UserLoginForm
 from env_vars import SQLALCHEMY_DATABASE_URI, SECRET_KEY
-from genius_api_handler import search_api
+from external_api_handler import search_api, get_song_lyrics
 
 CURR_USER_KEY = "curr_user"
 
@@ -343,11 +343,23 @@ def delete_annotation(id):
 
 @app.route('/api/search/<q_string>')
 def search_for_song(q_string):
-    """Search Genius API to get songs"""
+    """Search MusixMatch API to get songs"""
 
     #Add g.user check when testing complete
 
     results = search_api(q_string)
-    print(results)
 
     return jsonify(results)
+
+
+### Lyrics Routes ###
+
+@app.route('/api/lyrics/<track_id>')
+def return_lyrics(track_id):
+    """Gets lyrics from MusixMatch API"""
+
+    #Add g.user check when testing complete
+
+    lyrics = get_song_lyrics(track_id)
+
+    return jsonify(lyrics)
