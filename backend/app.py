@@ -49,6 +49,9 @@ def do_logout():
 
 @app.route('/')
 def home_route():
+    if g.user:
+        return render_template('app.html', flask_token=session[CURR_USER_KEY])
+
     return render_template('index.html')
 
 @app.route('/signup', methods=['GET', 'POST'])

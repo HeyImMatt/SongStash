@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <p>SongStash</p>
+      <p>SongStash - Token: {window.token}</p>
     </div>
   );
 }
