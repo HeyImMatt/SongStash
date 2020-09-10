@@ -18,6 +18,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 connect_db(app)
 
+# Remove before deploying
 # db.drop_all()
 # db.create_all()
 
