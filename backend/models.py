@@ -28,6 +28,16 @@ class Annotation(db.Model):
 
         return annotation
 
+    def serialize(self):
+        """Serializes anntation for json return"""
+        return {
+            "id": self.id,
+            "annotation": self.annotation,
+            "lyric_index": self.lyric_index,
+            "user_id": self.user_id,
+            "song_id": self.song_id,
+        }
+
 class Song(db.Model):
     """Song Model"""
 
@@ -43,10 +53,21 @@ class Song(db.Model):
 
     @classmethod
     def create_song(cls, title, artist, lyrics, user_id):
+        """Create song in db"""
         song = Song(title=title, artist=artist, lyrics=lyrics, user_id=user_id)
         db.session.add(song)
 
         return song
+
+    def serialize(self):
+        """Serializes song for json return"""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "artist": self.artist,
+            "lyrics": self.lyrics,
+            "user_id": self.user_id,
+        }
 
 class Stash(db.Model):
     """Stash Model"""
@@ -65,6 +86,14 @@ class Stash(db.Model):
         db.session.add(stash)
 
         return stash
+
+    def serialize(self):
+        """Serializes stash for json return"""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "user_id": self.user_id,
+        }
 
 class User(db.Model):
     """System User"""

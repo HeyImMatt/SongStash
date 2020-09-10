@@ -9,7 +9,7 @@ from external_api_handler import search_api, get_song_lyrics
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources=r'/api/*')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -88,7 +88,7 @@ def user_login():
 
         if user:
             do_login(user)
-            return 'Login Success!'
+            return redirect('/')
         
         return 'Login Failed.'
     
@@ -112,15 +112,16 @@ def logout():
 @app.route('/api/users/<int:user_id>', methods=['GET'])
 def get_user_songs_stashes_info(user_id):
     """Main GET route to return user's stashes and songs"""
-
-    if g.user and g.user.id == user_id:
+    if g.user and int(g.user.id) == user_id:
         user = User.query.get_or_404(user_id)
+        songs = [s.serialize() for s in user.songs]
+        stashes = [s.serialize() for s in user.stashes]
 
         data = {
-          "id": user.id,
-          "songs": user.songs,
-          "stashes": user.stashes
+          "songs": songs,
+          "stashes": stashes
         }
+        
         return jsonify(data), 200
     
     return jsonify({"message":"Unauthorized"}), 401
