@@ -23,8 +23,7 @@ function App() {
   return (
     <div className="App">
       <p>User Id: {user.id}</p>
-      <p>User Songs: {user.songs}</p>
-      <p>User Stashes: {user.stashes}</p>
+      {user.songs.map(song => (<p>{song.lyrics.replace(/\n/g, '<br />')}</p>))}
     </div>
   );
 }
