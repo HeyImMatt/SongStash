@@ -1,0 +1,1 @@
+{"version":3,"sources":["AppNav.css","App.css"],"names":[],"mappings":"AAAA,cACE,WACF,CCFA,SACE,YACF","file":"main.9b9a6f24.chunk.css","sourcesContent":["#main-nav-bar {\n  height: 100%;\n}\n","#nav-col {\n  height: 100vh;\n}"]}
