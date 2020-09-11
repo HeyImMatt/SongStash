@@ -6,7 +6,6 @@ const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 export function postNewSong(song, userId) {
   return async function(dispatch) {
     const resp = await axios.post(`${API_URL}/songs`, {...song, user_id: userId});
-    console.log(resp.data)
     return dispatch(createNewSong(resp.data));
   }
 }
