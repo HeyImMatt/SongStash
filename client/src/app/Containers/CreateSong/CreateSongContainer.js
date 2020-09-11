@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import { postNewSong } from '../../Actions/song';
 import CreateSongForm from '../../Components/CreateSongForm/CreateSongForm';
@@ -12,6 +13,7 @@ export default function CreateSongContainer() {
     lyrics: ''
   };
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector( store => store.user );
   const song = useSelector( store => store.song );
   const [formData, setFormData] = useState(song || DEFAULT_FORM_STATE);
@@ -22,12 +24,13 @@ export default function CreateSongContainer() {
       if (!formData.id) {
         await dispatch(postNewSong(formData, user.id));
         setIsSubmitting(false);
+        history.push('/song');
       }
     };
     if (isSubmitting) {
       submitSong();
     };
-  }, [dispatch, isSubmitting, formData, user]);
+  }, [dispatch, isSubmitting, formData, user, history]);
 
   const formHandler = (e) => {
     const {name, value} = e.target;
