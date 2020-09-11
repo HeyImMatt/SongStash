@@ -6,7 +6,7 @@ import CreateSongForm from '../../Components/CreateSongForm/CreateSongForm';
 
 export default function CreateSongContainer() {
   const DEFAULT_FORM_STATE = {
-    id: '',
+    id: null,
     title: '',
     artist: '',
     lyrics: ''
@@ -18,12 +18,14 @@ export default function CreateSongContainer() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(function() {
-    async function postSong() {
-      await dispatch(postNewSong(formData, user.id));
-      setIsSubmitting(false);
+    async function submitSong() {
+      if (!formData.id) {
+        await dispatch(postNewSong(formData, user.id));
+        setIsSubmitting(false);
+      }
     };
     if (isSubmitting) {
-      postSong();
+      submitSong();
     };
   }, [dispatch, isSubmitting, formData, user]);
 
@@ -42,7 +44,7 @@ export default function CreateSongContainer() {
 
   return (
     <>
-      <Col md={8} className="text-center mx-auto mb-5">
+      <Col md={8} className="text-center mx-auto mb-3">
         <h2>Create Song</h2>
       </Col>
       <CreateSongForm formData={formData} formHandler={formHandler} submitHandler={submitHandler} />

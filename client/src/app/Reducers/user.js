@@ -3,9 +3,9 @@ import {
 } from '../Actions/types';
 
 const INITIAL_STATE = {
-  id: window.token,
+  id: parseInt(window.token),
   songs: [],
-  stashes: [],
+  stashes: [], 
 }
 
 function htmlify(songs) {
