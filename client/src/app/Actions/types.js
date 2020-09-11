@@ -1,1 +1,2 @@
 export const FETCH_USER_DATA = 'FETCH_USER_DATA';
+export const CREATE_NEW_SONG = 'CREATE_NEW_SONG';

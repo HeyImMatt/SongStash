@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, flash, render_template, session, g, jsonify
+from flask import Flask, request, redirect, flash, render_template, session, g, jsonify, make_response
 from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong, UserStash
@@ -118,13 +118,13 @@ def get_user_songs_stashes_info(user_id):
         stashes = [s.serialize() for s in user.stashes]
 
         data = {
-          "songs": songs,
-          "stashes": stashes
+        "songs": songs,
+        "stashes": stashes
         }
         
-        return jsonify(data), 200
+        return make_response(jsonify(data), 200)
     
-    return jsonify({"message":"Unauthorized"}), 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Stash Routes ###    
 
@@ -142,10 +142,10 @@ def add_stash():
     try: 
         db.session.commit()
         user_stash = UserStash.create_user_stash(stash.id, user_id)
-        return jsonify({"stash_id": stash.id}, 201)
+        return make_response(jsonify({"stash_id": stash.id}, 201))
     
     except:
-        return jsonify({"message":"Error adding stash"}, 400)
+        return make_response(jsonify({"message":"Error adding stash"}), 400)
     
     return 400
 
@@ -164,10 +164,10 @@ def edit_stash(id):
 
     try: 
         db.session.commit()
-        return jsonify({"stash_id": stash.id}, 200)
+        return make_response(jsonify({"stash_id": stash.id}), 200)
     
     except:
-        return jsonify({"message":"Error editing stash"}, 400)
+        return make_response(jsonify({"message":"Error editing stash"}), 400)
     
     return 400
 
@@ -182,7 +182,7 @@ def delete_stash(id):
     db.session.delete(stash)
     db.session.commit()
 
-    return (jsonify(message="Stash deleted"), 200)
+    return make_response(jsonify({"message":"Stash deleted"}), 200)
 
 @app.route('/api/stashes/songs', methods=['POST'])
 def add_song_to_stash():
@@ -198,10 +198,10 @@ def add_song_to_stash():
 
     try: 
         db.session.commit()
-        return jsonify({"stash_song_id": stash_song.id}, 201)
+        return make_response(jsonify({"stash_song_id": stash_song.id}), 201)
     
     except:
-        return jsonify({"message":"Error adding song to stash"}, 400)
+        return make_response(jsonify({"message":"Error adding song to stash"}), 400)
     
     return 400
 
@@ -216,7 +216,7 @@ def delete_song_from_stash(id):
     db.session.delete(stash_song)
     db.session.commit()
 
-    return (jsonify(message="Song deleted from stash"), 200)
+    return make_response(jsonify({"message":"Song deleted from stash"}), 200)
 
 ### Song Routes ###
 
@@ -236,10 +236,11 @@ def add_song():
     try: 
         db.session.commit()
         user_song = UserSong.create_user_song(song.id, user_id)
-        return jsonify({"song_id": song.id}, 201)
+        data = song.serialize()
+        return make_response(jsonify(data), 201)
     
     except:
-        return jsonify({"message":"Error adding song"}, 400)
+        return make_response(jsonify({"message":"Error adding song"}), 400)
     
     return 400
 
@@ -262,10 +263,10 @@ def edit_song(id):
 
     try: 
         db.session.commit()
-        return jsonify({"song_id": song.id}, 200)
+        return make_response(jsonify({"song_id": song.id}), 200)
     
     except:
-        return jsonify({"message":"Error editing song"}, 400)
+        return make_response(jsonify({"message":"Error editing song"}), 400)
     
     return 400
 
@@ -280,7 +281,7 @@ def delete_song(id):
     db.session.delete(song)
     db.session.commit()
 
-    return (jsonify(message="Song deleted"), 200)
+    return make_response(jsonify({"message":"Song deleted"}), 200)
 
 ### Annotation Routes ###
 
@@ -300,10 +301,10 @@ def add_annotation():
     try: 
         db.session.commit()
         song_annotation = SongAnnotation.create_song_annotation(annotation.id, song_id)
-        return jsonify({"annotation_id": annotation.id}, 201)
+        return make_response(jsonify({"annotation_id": annotation.id}), 201)
     
     except:
-        return jsonify({"message":"Error adding annotation"}, 400)
+        return make_response(jsonify({"message":"Error adding annotation"}), 400)
     
     return 400
 
@@ -324,10 +325,10 @@ def edit_annotation(id):
 
     try: 
         db.session.commit()
-        return jsonify({"annotation_id": a.id}, 200)
+        return make_response(jsonify({"annotation_id": a.id}), 200)
     
     except:
-        return jsonify({"message":"Error editing annotation"}, 400)
+        return make_response(jsonify({"message":"Error editing annotation"}), 400)
     
     return 400
 
@@ -342,7 +343,7 @@ def delete_annotation(id):
     db.session.delete(annotation)
     db.session.commit()
 
-    return (jsonify(message="Annotation deleted"), 200)
+    return make_response(jsonify({"message":"Annotation deleted"}), 200)
 
 ### Search Routes ###
 
@@ -354,7 +355,7 @@ def search_for_song(q_string):
 
     results = search_api(q_string)
 
-    return jsonify(results)
+    return make_response(jsonify(results), 200)
 
 
 ### Lyrics Routes ###
@@ -367,4 +368,4 @@ def return_lyrics(track_id):
 
     lyrics = get_song_lyrics(track_id)
 
-    return jsonify(lyrics)
+    return make_response(jsonify(lyrics), 200)

@@ -18,6 +18,7 @@ function htmlify(songs) {
 export default function rootReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case FETCH_USER_DATA:
+      console.log(action.data);
       const songs = htmlify(action.data.songs);
       return {
         ...state,
