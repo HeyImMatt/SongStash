@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserDataFromApi } from '../../Actions/user';
 import { Col, Row } from 'reactstrap';
 import AppNav from '../../Components/AppNav/AppNav';
+import Routes from '../../../routes';
 import './App.css';
 
 function App() {
@@ -29,14 +30,7 @@ function App() {
           <AppNav />
         </Col>
         <Col md={10}>
-          <p>User Songs...</p>
-          {user.songs.map(song => (
-          <>
-            <h3>{song.title}</h3>
-            <h5>{song.artist}</h5>
-            <p dangerouslySetInnerHTML = {{__html: song.lyrics}}></p>
-          </>
-          ))}
+          <Routes />
         </Col>
       </Row>
     </>
