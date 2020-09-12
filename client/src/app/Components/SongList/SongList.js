@@ -8,12 +8,18 @@ export default function SongList() {
     {
       dataField: 'artist',
       text: 'Artist',
+      sort: true,
     },
     {
       dataField: 'title',
       text: 'Song Title',
+      sort: true,
     },
   ];
+  const defaultSorted = [{
+    dataField: 'artist',
+    order: 'asc',
+  }]
 
-  return <BootstrapTable bootstrap4 keyField={'id'} data={user.songs} columns={columns} />
+  return <BootstrapTable bootstrap4 keyField={'id'} data={user.songs} columns={columns} defaultSorted={defaultSorted} />
 }
