@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Button, Col, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
-import { postNewSong } from '../../Actions/song';
+import { Button, Col, Form, FormGroup, Input } from 'reactstrap';
+import { searchSongsApi } from '../../Actions/search';
 
 export default function SearchSongContainer() {
   const DEFAULT_FORM_STATE = {
@@ -15,14 +15,14 @@ export default function SearchSongContainer() {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(function() {
-    async function submitSong() {
+    async function searchSongs() {
       if (!formData.id) {
-        await dispatch(postNewSong(formData));
+        await dispatch(searchSongsApi(formData.query));
         setIsSearching(false);
       }
     };
     if (isSearching) {
-      submitSong();
+      searchSongs();
     };
   }, [dispatch, isSearching, formData, history]);
 
