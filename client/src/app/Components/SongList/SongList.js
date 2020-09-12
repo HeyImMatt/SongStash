@@ -34,8 +34,8 @@ export default function SongList({ songs }) {
 
   return <BootstrapTable 
   bootstrap4 
-  keyField={'id'} 
-  data={user.songs} 
+  keyField={songs ? 'mmId' : 'id'} 
+  data={songs || user.songs} 
   columns={columns} 
   defaultSorted={defaultSorted} 
   rowEvents={rowEvents}

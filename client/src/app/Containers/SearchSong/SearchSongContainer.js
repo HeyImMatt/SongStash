@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, Input } from 'reactstrap';
+import SongList from '../../Components/SongList/SongList';
 import { searchSongsApi } from '../../Actions/search';
 
 export default function SearchSongContainer() {
@@ -10,7 +11,7 @@ export default function SearchSongContainer() {
   };
   const dispatch = useDispatch();
   const history = useHistory();
-  // const user = useSelector( store => store.user );
+  const search = useSelector( store => store.search );
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
   const [isSearching, setIsSearching] = useState(false);
 
@@ -49,8 +50,9 @@ export default function SearchSongContainer() {
         <FormGroup>
           <Input type="text" id="query" name="query" value={formData.query} onChange={formHandler} required />
         </FormGroup>
-        <Button>Search</Button>
+        <Button className="mb-3">Search</Button>
       </Form>
+      {search && <SongList songs={search.results}/>}
     </Col>
   )
 }
