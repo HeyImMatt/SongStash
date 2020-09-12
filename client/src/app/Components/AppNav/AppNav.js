@@ -25,7 +25,7 @@ export default function AppNav() {
             <Link to="/mysongs"><NavLink>My Songs</NavLink></Link>
           </NavItem>
           <NavItem className="mx-auto my-auto">
-            <NavLink>Song Search</NavLink>
+          <Link to="/searchsongs"><NavLink onClick={clearSong}>Song Search</NavLink></Link>
           </NavItem>
           <NavItem className="mx-auto my-auto">
             <Link to="/createsong"><NavLink onClick={clearSong}>Create Song</NavLink></Link>
