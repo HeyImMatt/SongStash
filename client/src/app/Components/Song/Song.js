@@ -5,7 +5,7 @@ export default function Song({ song }) {
     <>
       <h3>{song.title}</h3>
       <h5>{song.artist}</h5>
-      <span id="lyrics" className="mt-3">{song.lyrics}</span>
+      <span id="lyrics" className="mt-3" dangerouslySetInnerHTML = {{__html: song.lyrics}}></span>
     </>
   )
 }

@@ -1,18 +1,19 @@
 import axios from 'axios';
-import { CREATE_NEW_SONG } from './types';
+import { SET_CURRENT_SONG } from './types';
 
 const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 
 export function postNewSong(song, userId) {
   return async function(dispatch) {
     const resp = await axios.post(`${API_URL}/songs`, {...song, user_id: userId});
-    return dispatch(createNewSong(resp.data));
+    return dispatch(setCurrentUserSong(resp.data));
   }
 }
 
-function createNewSong(data) {
+export function setCurrentUserSong(data) {
   return {
-    type: CREATE_NEW_SONG,
+    type: SET_CURRENT_SONG,
     data,
+    isUserSong: true,
   };
 };

@@ -4,7 +4,6 @@ import { getUserDataFromApi } from '../../Actions/user';
 import { Col, Row } from 'reactstrap';
 import AppNav from '../../Components/AppNav/AppNav';
 import Routes from '../../../routes';
-import SongList from '../SongList/SongList';
 import './App.css';
 
 function App() {
@@ -31,7 +30,6 @@ function App() {
           <AppNav />
         </Col>
         <Col md={10}>
-          <SongList />
           <Routes />
         </Col>
       </Row>

@@ -1,9 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUserSong } from '../../Actions/song';
+import { useHistory } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-export default function SongList() {
+export default function SongList({ songs }) {
+  // Note: pass in songs from My Songs or Search containers and then remove user line below
   const user = useSelector((store) => store.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
   const columns = [
     {
       dataField: 'artist',
@@ -20,6 +25,19 @@ export default function SongList() {
     dataField: 'artist',
     order: 'asc',
   }]
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      dispatch(setCurrentUserSong(row));
+      history.push('/song');
+    }
+  };
 
-  return <BootstrapTable bootstrap4 keyField={'id'} data={user.songs} columns={columns} defaultSorted={defaultSorted} />
+  return <BootstrapTable 
+  bootstrap4 
+  keyField={'id'} 
+  data={user.songs} 
+  columns={columns} 
+  defaultSorted={defaultSorted} 
+  rowEvents={rowEvents}
+  />
 }

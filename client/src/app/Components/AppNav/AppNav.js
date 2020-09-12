@@ -22,7 +22,7 @@ export default function AppNav() {
             <NavLink>My Stashes</NavLink>
           </NavItem>
           <NavItem className="mx-auto my-auto">
-            <NavLink>My Songs</NavLink>
+            <Link to="/mysongs"><NavLink>My Songs</NavLink></Link>
           </NavItem>
           <NavItem className="mx-auto my-auto">
             <NavLink>Song Search</NavLink>
