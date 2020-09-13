@@ -48,8 +48,9 @@ def do_logout():
 # Login & Signup plus UI Handled by Flask #
 ###########################################
 
-@app.route('/')
-def home_route():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def home_route(path):
     if g.user:
         return render_template('app.html', flask_token=session[CURR_USER_KEY])
 
