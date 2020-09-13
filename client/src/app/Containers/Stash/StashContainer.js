@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Redirect } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import CreateStash from '../../Components/CreateStash/CreateStash';
 import { postNewStash } from '../../Actions/stash';
@@ -21,7 +21,7 @@ export default function StashContainer() {
       if (!formData.id) {
         await dispatch(postNewStash(formData.name, user.id));
         setIsAdding(false);
-        history.push('/stash')
+        history.push('/');
       }
     };
     if (isAdding) {

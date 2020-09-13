@@ -1,3 +1,8 @@
 #main-nav-bar {
   height: 100%;
 }
+
+hr {
+  background-color: white;
+  width: 100%;
+}
