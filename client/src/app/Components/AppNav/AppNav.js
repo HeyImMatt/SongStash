@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
+import { Nav, Navbar, NavbarBrand, NavItem, NavLink, NavbarText } from 'reactstrap';
+import { AddCircle } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { CLEAR_CURRENT_SONG } from '../../Actions/types';
 import './AppNav.css';
@@ -19,7 +20,7 @@ export default function AppNav() {
         <NavbarBrand className="mb-auto mx-auto w-100 text-center" href="/">SongStash</NavbarBrand>
         <Nav navbar pills justified className="h-75 w-100">
           <NavItem className="mx-auto my-auto">
-            <NavLink>My Stashes</NavLink>
+            <NavbarText>My Stashes  <Link to="/addstash"><AddCircle /></Link></NavbarText>
           </NavItem>
           <NavItem className="mx-auto my-auto">
             <Link to="/mysongs"><NavLink>My Songs</NavLink></Link>

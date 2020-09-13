@@ -5,6 +5,7 @@ import { Col, Row } from 'reactstrap';
 import AppNav from '../../Components/AppNav/AppNav';
 import Routes from '../../../routes';
 import './App.css';
+import loader from '../../../images/music-loader.gif';
 
 function App() {
   const user = useSelector( store => store.user );
@@ -21,7 +22,11 @@ function App() {
     };
   }, [dispatch, isLoading, user]);
 
-  if (isLoading) return <h3>Loading</h3>
+  // if (isLoading) return (
+  //   <div>
+  //     <img src={loader} alt="Music loader" />
+  //   </div>
+  // )
 
   return (
     <>
@@ -30,6 +35,7 @@ function App() {
           <AppNav />
         </Col>
         <Col md={10}>
+          {isLoading && <img className="d-block m-auto" src={loader} alt="Music loader" />}
           <Routes />
         </Col>
       </Row>
