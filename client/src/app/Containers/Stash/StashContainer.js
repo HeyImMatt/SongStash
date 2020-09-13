@@ -21,6 +21,7 @@ export default function StashContainer() {
       if (!formData.id) {
         await dispatch(postNewStash(formData.name, user.id));
         setIsAdding(false);
+        history.push('/stash')
       }
     };
     if (isAdding) {
