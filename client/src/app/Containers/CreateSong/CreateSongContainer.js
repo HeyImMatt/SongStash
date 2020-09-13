@@ -16,7 +16,8 @@ export default function CreateSongContainer() {
   const history = useHistory();
   const user = useSelector( store => store.user );
   const song = useSelector( store => store.song );
-  const [formData, setFormData] = useState(song || DEFAULT_FORM_STATE);
+  const lyrics = song.lyrics ? song.lyrics.replace(/<br\s*\/?>/mg,'\n') : null;
+  const [formData, setFormData] = useState( {...song, lyrics} || DEFAULT_FORM_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(function() {
