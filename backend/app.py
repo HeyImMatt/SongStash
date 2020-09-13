@@ -143,7 +143,8 @@ def add_stash():
     try: 
         db.session.commit()
         user_stash = UserStash.create_user_stash(stash.id, user_id)
-        return make_response(jsonify({"stash_id": stash.id}, 201))
+        data = stash.serialize()
+        return make_response(jsonify(data), 201)
     
     except:
         return make_response(jsonify({"message":"Error adding stash"}), 400)

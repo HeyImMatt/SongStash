@@ -92,7 +92,7 @@ class Stash(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "user_id": self.user_id,
+            "song_ids": [s.id for s in self.songs]
         }
 
 class User(db.Model):
