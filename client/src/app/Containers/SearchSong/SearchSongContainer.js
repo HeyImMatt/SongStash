@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Button, Col, Form, FormGroup, Input } from 'reactstrap';
 import SongList from '../../Components/SongList/SongList';
 import { searchSongsApi } from '../../Actions/search';
+import { getLyrics } from '../../Actions/song';
 
 export default function SearchSongContainer() {
   const DEFAULT_FORM_STATE = {
@@ -52,7 +53,7 @@ export default function SearchSongContainer() {
         </FormGroup>
         <Button className="mb-3">Search</Button>
       </Form>
-      {search && <SongList songs={search.results}/>}
+      {search && <SongList songs={search.results} getLyrics={getLyrics} />}
     </Col>
   )
 }

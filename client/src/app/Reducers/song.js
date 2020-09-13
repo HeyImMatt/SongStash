@@ -12,10 +12,11 @@ export default function rootReducer(state = INITIAL_STATE, action) {
       const song = action.data;
       return {
         ...state,
-        id: action.isUserSong ? song.id : null,
+        id: song.id ? song.id : null,
         title: song.title,
         artist: song.artist,
         lyrics: song.lyrics,
+        lyricsLocation: song.lyricsLocation ? song.lyricsLocation : null,
       }
     
     case CLEAR_CURRENT_SONG:

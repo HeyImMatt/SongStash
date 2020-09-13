@@ -50,7 +50,12 @@ export default function CreateSongContainer() {
       <Col md={8} className="text-center mx-auto mb-3">
         <h2>Create Song</h2>
       </Col>
-      <CreateSongForm formData={formData} formHandler={formHandler} submitHandler={submitHandler} />
+      <CreateSongForm 
+      formData={formData} 
+      formHandler={formHandler} 
+      submitHandler={submitHandler} 
+      lyricsUrl={song.lyricsLocation} 
+      />
     </>
   )
 }
