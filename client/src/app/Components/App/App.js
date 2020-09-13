@@ -22,12 +22,6 @@ function App() {
     };
   }, [dispatch, isLoading, user]);
 
-  // if (isLoading) return (
-  //   <div>
-  //     <img src={loader} alt="Music loader" />
-  //   </div>
-  // )
-
   return (
     <>
       <Row>

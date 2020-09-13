@@ -20,7 +20,7 @@ export default function AppNav() {
         <NavbarBrand className="mb-auto mx-auto w-100 text-center" href="/">SongStash</NavbarBrand>
         <Nav navbar pills justified className="h-75 w-100">
           <NavItem className="mx-auto my-auto">
-            <NavbarText>My Stashes  <Link to="/addstash"><AddCircle /></Link></NavbarText>
+            <NavbarText>My Stashes  <Link to="stash/createstash"><AddCircle /></Link></NavbarText>
           </NavItem>
           <NavItem className="mx-auto my-auto">
             <Link to="/mysongs"><NavLink>My Songs</NavLink></Link>

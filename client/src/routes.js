@@ -4,6 +4,7 @@ import CreateSongContainer from './app/Containers/CreateSong/CreateSongContainer
 import SongDetailContainer from './app/Containers/SongDetail/SongDetailContainer';
 import SearchSongContainer from './app/Containers/SearchSong/SearchSongContainer';
 import SongList from './app/Components/SongList/SongList';
+import StashContainer from './app/Containers/Stash/StashContainer';
 
 export default function Routes() {
   return (
@@ -19,6 +20,9 @@ export default function Routes() {
       </Route>
       <Route path="/song" exact>
         <SongDetailContainer />
+      </Route>
+      <Route path="/stash" >
+        <StashContainer />
       </Route>
       <Redirect to="/" />
     </Switch>
