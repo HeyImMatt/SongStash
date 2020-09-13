@@ -5,7 +5,7 @@ API_BASE_URL = 'http://api.musixmatch.com/ws/1.1/'
 
 def search_api(q_string):
     """Searches the MusixMatch API for songs and returns payload"""
-    r = requests.get(f'{API_BASE_URL}/track.search?q={q_string}&apikey={MUSIX_MATCH_API_KEY}')
+    r = requests.get(f'{API_BASE_URL}/track.search?q={q_string}&f_has_lyrics=1&page_size=100&s_artist_rating=desc&apikey={MUSIX_MATCH_API_KEY}')
     data = r.json()
     results = [{
         "mmId": s["track"]["track_id"],
@@ -20,5 +20,4 @@ def get_song_lyrics(track_id):
     """Retrieves lyrics from MusixMatch API"""
     r = requests.get(f'{API_BASE_URL}/track.lyrics.get?track_id={track_id}&apikey={MUSIX_MATCH_API_KEY}')
     data = r.json()
-    print(data)
-    return data['message']['body']['lyrics']['lyrics_body']
+    return data['message']['body']['lyrics']['lyrics_body'].split('...', 1)[0]
