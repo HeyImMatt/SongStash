@@ -3,6 +3,7 @@ __pycache__/
 .vscode/
 
 env_vars.py
+.env
 
 genius.txt
 

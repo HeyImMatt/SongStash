@@ -1,20 +1,23 @@
 from flask import Flask, request, redirect, flash, render_template, session, g, jsonify, make_response
 from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError
+from dotenv import load_dotenv
 from models import db, connect_db, Annotation, Song, Stash, StashSong, User, SongAnnotation, UserSong, UserStash
 from forms import UserSignupForm, UserLoginForm
-from env_vars import SQLALCHEMY_DATABASE_URI, SECRET_KEY
 from external_api_handler import search_api, get_song_lyrics
+import os
 
 CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 CORS(app, resources=r'/api/*')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+load_dotenv()
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 connect_db(app)
 
