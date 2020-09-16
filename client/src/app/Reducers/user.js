@@ -5,7 +5,7 @@ import {
 const INITIAL_STATE = {
   id: parseInt(window.token),
   songs: [],
-  stashes: [], 
+  stashes: [],
 }
 
 function htmlify(songs) {
