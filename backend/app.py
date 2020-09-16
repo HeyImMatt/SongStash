@@ -7,8 +7,6 @@ from forms import UserSignupForm, UserLoginForm
 from external_api_handler import search_api, get_song_lyrics
 import os
 
-CURR_USER_KEY = "curr_user"
-
 app = Flask(__name__)
 CORS(app, resources=r'/api/*')
 
@@ -20,6 +18,9 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 connect_db(app)
+
+CURR_USER_KEY = 'curr_user_id'
+CURR_USER_NAME = 'curr_user_name'
 
 # Remove before deploying
 # db.drop_all()
@@ -40,12 +41,14 @@ def do_login(user):
     """Log in user."""
 
     session[CURR_USER_KEY] = user.id
+    session[CURR_USER_NAME] = user.username
 
 def do_logout():
     """Logout user."""
 
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
+        del session[CURR_USER_NAME]
 
 ###########################################
 # Login & Signup plus UI Handled by Flask #
@@ -74,7 +77,6 @@ def user_signup():
             db.session.commit()
             do_login(user)
             return redirect('/')
-
         except IntegrityError as e:
             flash("Username already taken", 'danger')
             return render_template('form.html', form=form)
@@ -95,7 +97,7 @@ def user_login():
             return redirect('/')
         
         return 'Login Failed.'
-    
+
     return render_template('form.html', form=form, login=True)
 
 @app.route('/logout')
@@ -127,7 +129,7 @@ def get_user_songs_stashes_info(user_id):
         }
         
         return make_response(jsonify(data), 200)
-    
+
     return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Stash Routes ###    
@@ -136,92 +138,103 @@ def get_user_songs_stashes_info(user_id):
 def add_stash():
     """Creates a stash and UserStash association"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        name = request.json['name']
+        user_id = int(g.user.id)
+        
+        stash = Stash.create_stash(name, user_id)
 
-    name = request.json['name']
-    user_id = int(request.json['user_id'])
-    
-    stash = Stash.create_stash(name, user_id)
+        try: 
+            db.session.commit()
+            user_stash = UserStash.create_user_stash(stash.id, user_id)
+            data = stash.serialize()
+            return make_response(jsonify(data), 201)
+        except:
+            return make_response(jsonify({"message":"Error adding stash"}), 400)
 
-    try: 
-        db.session.commit()
-        user_stash = UserStash.create_user_stash(stash.id, user_id)
-        data = stash.serialize()
-        return make_response(jsonify(data), 201)
-    
-    except:
-        return make_response(jsonify({"message":"Error adding stash"}), 400)
-    
-    return 400
+    return 401
 
 @app.route('/api/stashes/<int:id>', methods=['PATCH'])
 def edit_stash(id):
     """Edit Stash"""
 
-    #Add g.user check and match with request user id when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        stash = Stash.query.get_or_404(id)
 
-    stash = Stash.query.get_or_404(id)
+        if stash.user_id == user_id:
+            name = request.json['name']
+            stash.name = name if name else stash.name
 
-    name = request.json['name']
-    user_id = request.json['user_id']
-    
-    stash.name = name if name else stash.name
+            try: 
+                db.session.commit()
+                return make_response(jsonify({"stash_id": stash.id}), 200)
+            except:
+                return make_response(jsonify({"message":"Error editing stash"}), 400)
 
-    try: 
-        db.session.commit()
-        return make_response(jsonify({"stash_id": stash.id}), 200)
-    
-    except:
-        return make_response(jsonify({"message":"Error editing stash"}), 400)
-    
-    return 400
+    return 401
 
 @app.route('/api/stashes/<int:id>', methods=['DELETE'])
 def delete_stash(id):
     """Delete stash route"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        stash = Stash.query.get_or_404(id)
 
-    stash = Stash.query.get_or_404(id)
+        if stash.user_id == user_id:
+            db.session.delete(stash)
 
-    db.session.delete(stash)
-    db.session.commit()
+            try:
+                db.session.commit()
+                return make_response(jsonify({"message":"Stash deleted"}), 200)
+            except:
+                return make_response(jsonify({"message":"Error deleting stash"}), 400)
 
-    return make_response(jsonify({"message":"Stash deleted"}), 200)
+    return 401
 
 @app.route('/api/stashes/songs', methods=['POST'])
 def add_song_to_stash():
     """Adds a song to a stash"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        song_id = int(request.json['song_id'])
+        stash_id = int(request.json['stash_id'])
+        user_id = int(g.user.id)
 
-    song_id = int(request.json['song_id'])
-    stash_id = int(request.json['stash_id'])
-    user_id = int(request.json['user_id'])
-    
-    stash_song = StashSong.create_stash_song(song_id, stash_id)
+        song = Song.query.get_or_404(song_id)
+        stash = Stash.query.get_or_404(stash_id)
 
-    try: 
-        db.session.commit()
-        return make_response(jsonify({"stash_song_id": stash_song.id}), 201)
-    
-    except:
-        return make_response(jsonify({"message":"Error adding song to stash"}), 400)
-    
-    return 400
+        if song.user_id == user_id and stash.user_id == user_id:
+            stash_song = StashSong.create_stash_song(song_id, stash_id)
+
+            try: 
+                db.session.commit()
+                return make_response(jsonify({"stash_song_id": stash_song.id}), 201)
+            except:
+                return make_response(jsonify({"message":"Error adding song to stash"}), 400)
+
+    return 401
 
 @app.route('/api/stashes/songs/<int:id>', methods=['DELETE'])
 def delete_song_from_stash(id):
     """Delete song from stash"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        stash_song = StashSong.query.get_or_404(id)
+        stash = Stash.query.get_or_404(stash_song.stash_id)
 
-    stash_song = StashSong.query.get_or_404(id)
+        if stash.user_id == user_id:
+            db.session.delete(stash_song)
 
-    db.session.delete(stash_song)
-    db.session.commit()
+            try:
+                db.session.commit()
+                return make_response(jsonify({"message":"Song deleted from stash"}), 200)
+            except:
+                return make_response(jsonify({"message":"Error deleting song from stash"}), 400)
 
-    return make_response(jsonify({"message":"Song deleted from stash"}), 200)
+    return 401
 
 ### Song Routes ###
 
@@ -229,64 +242,66 @@ def delete_song_from_stash(id):
 def add_song():
     """Creates a song and UserSong association"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        title = request.json['title']
+        artist = request.json['artist']
+        lyrics = request.json['lyrics']
+    
+        song = Song.create_song(title, artist, lyrics, user_id)
 
-    title = request.json['title']
-    artist = request.json['artist']
-    lyrics = request.json['lyrics']
-    user_id = int(request.json['user_id'])
-    
-    song = Song.create_song(title, artist, lyrics, user_id)
+        try: 
+            db.session.commit()
+            user_song = UserSong.create_user_song(song.id, user_id)
+            data = song.serialize()
+            return make_response(jsonify(data), 201)
+        except:
+            return make_response(jsonify({"message":"Error adding song"}), 400)
 
-    try: 
-        db.session.commit()
-        user_song = UserSong.create_user_song(song.id, user_id)
-        data = song.serialize()
-        return make_response(jsonify(data), 201)
-    
-    except:
-        return make_response(jsonify({"message":"Error adding song"}), 400)
-    
-    return 400
+    return 401
 
 @app.route('/api/songs/<int:id>', methods=['PATCH'])
 def edit_song(id):
     """Edit Song"""
 
-    #Add g.user check and match with request user id when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        song = Song.query.get_or_404(id)
 
-    song = Song.query.get_or_404(id)
+        if user_id == song.user_id:
+            title = request.json['title']
+            artist = request.json['artist']
+            lyrics = request.json['lyrics']
+            
+            song.title = title if title else song.title
+            song.artist = artist if artist else song.artist
+            song.lyrics = lyrics if lyrics else song.lyrics
 
-    title = request.json['title']
-    artist = request.json['artist']
-    lyrics = request.json['lyrics']
-    user_id = int(request.json['user_id'])
-    
-    song.title = title if title else song.title
-    song.artist = artist if artist else song.artist
-    song.lyrics = lyrics if lyrics else song.lyrics
+            try: 
+                db.session.commit()
+                return make_response(jsonify({"song_id": song.id}), 200)
+            except:
+                return make_response(jsonify({"message":"Error editing song"}), 400)
 
-    try: 
-        db.session.commit()
-        return make_response(jsonify({"song_id": song.id}), 200)
-    
-    except:
-        return make_response(jsonify({"message":"Error editing song"}), 400)
-    
-    return 400
+    return 401
 
 @app.route('/api/songs/<int:id>', methods=['DELETE'])
 def delete_song(id):
     """Delete song route"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        song = Song.query.get_or_404(id)
 
-    song = Song.query.get_or_404(id)
+        if user_id == song.user_id:
+            db.session.delete(song)
+            try:
+                db.session.commit()
+                return make_response(jsonify({"message":"Song deleted"}), 200)
+            except:
+                return make_response(jsonify({"message":"Error deleting song"}), 400)
 
-    db.session.delete(song)
-    db.session.commit()
-
-    return make_response(jsonify({"message":"Song deleted"}), 200)
+    return 401
 
 ### Annotation Routes ###
 
@@ -294,61 +309,67 @@ def delete_song(id):
 def add_annotation():
     """Creates an annotation"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        annotation = request.json['annotation']
+        lyric_index = int(request.json['lyric_index'])
+        song_id = int(request.json['song_id'])
+        song = Song.query.get_or_404(song_id)
 
-    annotation = request.json['annotation']
-    lyric_index = int(request.json['lyric_index'])
-    user_id = int(request.json['user_id'])
-    song_id = int(request.json['song_id'])
-    
-    annotation = Annotation.create_annotation(annotation, lyric_index, user_id, song_id)
+        if user_id == song.user_id:
+            annotation = Annotation.create_annotation(annotation, lyric_index, user_id, song_id)
 
-    try: 
-        db.session.commit()
-        song_annotation = SongAnnotation.create_song_annotation(annotation.id, song_id)
-        return make_response(jsonify({"annotation_id": annotation.id}), 201)
-    
-    except:
-        return make_response(jsonify({"message":"Error adding annotation"}), 400)
-    
-    return 400
+            try: 
+                db.session.commit()
+                song_annotation = SongAnnotation.create_song_annotation(annotation.id, song_id)
+                return make_response(jsonify({"annotation_id": annotation.id}), 201)
+            
+            except:
+                return make_response(jsonify({"message":"Error adding annotation"}), 400)
+
+    return 401
 
 @app.route('/api/annotations/<int:id>', methods=['PATCH'])
 def edit_annotation(id):
     """Edit Annotation"""
 
-    #Add g.user check and match with request user id when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        a = Annotation.query.get_or_404(id)
+        annotation = request.json['annotation']
+        lyric_index = int(request.json['lyric_index'])
 
-    a = Annotation.query.get_or_404(id)
+        if user_id == a.user_id:
+            a.annotation = annotation if annotation else a.annotation
+            a.lyric_index = lyric_index if lyric_index else a.lyric_index
 
-    annotation = request.json['annotation']
-    lyric_index = int(request.json['lyric_index'])
-    user_id = int(request.json['user_id'])
-    
-    a.annotation = annotation if annotation else a.annotation
-    a.lyric_index = lyric_index if lyric_index else a.lyric_index
+            try: 
+                db.session.commit()
+                return make_response(jsonify({"annotation_id": a.id}), 200)
+            
+            except:
+                return make_response(jsonify({"message":"Error editing annotation"}), 400)
 
-    try: 
-        db.session.commit()
-        return make_response(jsonify({"annotation_id": a.id}), 200)
-    
-    except:
-        return make_response(jsonify({"message":"Error editing annotation"}), 400)
-    
-    return 400
+    return 401
 
 @app.route('/api/annotations/<int:id>', methods=['DELETE'])
 def delete_annotation(id):
     """Delete annotation route"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        user_id = int(g.user.id)
+        annotation = Annotation.query.get_or_404(id)
 
-    annotation = Annotation.query.get_or_404(id)
+        if user_id == annotation.user_id:
+            db.session.delete(annotation)
 
-    db.session.delete(annotation)
-    db.session.commit()
+            try:
+                db.session.commit()
+                return make_response(jsonify({"message":"Annotation deleted"}), 200)
+            except:
+                return make_response(jsonify({"message":"Error deleting annotation"}), 400)
 
-    return make_response(jsonify({"message":"Annotation deleted"}), 200)
+    return 401
 
 ### Search Routes ###
 
@@ -356,12 +377,11 @@ def delete_annotation(id):
 def search_for_song(q_string):
     """Search MusixMatch API to get songs"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        results = search_api(q_string)
+        return make_response(jsonify(results), 200)
 
-    results = search_api(q_string)
-
-    return make_response(jsonify(results), 200)
-
+    return 401
 
 ### Lyrics Routes ###
 
@@ -369,8 +389,8 @@ def search_for_song(q_string):
 def return_lyrics(track_id):
     """Gets lyrics from MusixMatch API"""
 
-    #Add g.user check when testing complete
+    if g.user:
+        lyrics = get_song_lyrics(track_id)
+        return make_response(jsonify(lyrics), 200)
 
-    lyrics = get_song_lyrics(track_id)
-
-    return make_response(jsonify(lyrics), 200)
+    return 401
