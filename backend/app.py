@@ -238,6 +238,22 @@ def delete_song_from_stash(id):
 
 ### Song Routes ###
 
+@app.route('/api/songs', methods=['GET'])
+def get_songs():
+    """Get all user songs"""
+
+    if g.user:
+        user_id = int(g.user.id)
+        user = User.query.get_or_404(user_id)
+        songs = [s.serialize() for s in user.songs]
+        data = {
+            "songs": songs,
+        }
+        
+        return make_response(jsonify(data), 200)
+
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
+
 @app.route('/api/songs', methods=['POST'])
 def add_song():
     """Creates a song and UserSong association"""
