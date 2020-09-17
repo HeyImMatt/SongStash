@@ -53,7 +53,7 @@ export default function SearchSongContainer() {
         </FormGroup>
         <Button className="mb-3">Search</Button>
       </Form>
-      {search && <SongList songs={search.results} getLyrics={getLyrics} />}
+      {search.results && <SongList songs={search.results} getLyrics={getLyrics} />}
     </Col>
   )
 }
