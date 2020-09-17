@@ -1,6 +1,7 @@
 import { 
   SET_CURRENT_SONG,
   CLEAR_CURRENT_SONG, 
+  DELETE_SONG,
 } from '../Actions/types';
 
 const INITIAL_STATE = {}
@@ -20,6 +21,9 @@ export default function rootReducer(state = INITIAL_STATE, action) {
       }
     
     case CLEAR_CURRENT_SONG:
+      return INITIAL_STATE;
+
+    case DELETE_SONG:
       return INITIAL_STATE;
 
     default:
