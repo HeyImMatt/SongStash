@@ -30,7 +30,7 @@ function App() {
         </Col>
         <Col md={10}>
           {isLoading && <img className="d-block m-auto" src={loader} alt="Music loader" />}
-          <Routes />
+          {!isLoading && <Routes />}
         </Col>
       </Row>
     </>
