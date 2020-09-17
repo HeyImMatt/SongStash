@@ -22,7 +22,7 @@ export default function AppNav() {
         <Nav navbar pills justified className="h-75 w-100">
           <hr />
           <NavItem className="mx-auto my-auto">
-            <NavbarText>My Stashes  <Link to="stash/createstash"><AddCircle /></Link></NavbarText>
+            <NavbarText>My Stashes  <Link to="/stash/createstash"><AddCircle /></Link></NavbarText>
             {user.stashes.map(stash => (<Link to={`/stash/${stash.id}`}><NavLink>{stash.name}</NavLink></Link>))}
           </NavItem>
           <hr />
