@@ -113,25 +113,6 @@ def logout():
 # API Routes #
 ##############
 
-### User Routes ###
-
-@app.route('/api/users/<int:user_id>', methods=['GET'])
-def get_user_songs_stashes_info(user_id):
-    """Main GET route to return user's stashes and songs"""
-    if g.user and int(g.user.id) == user_id:
-        user = User.query.get_or_404(user_id)
-        songs = [s.serialize() for s in user.songs]
-        stashes = [s.serialize() for s in user.stashes]
-
-        data = {
-        "songs": songs,
-        "stashes": stashes
-        }
-        
-        return make_response(jsonify(data), 200)
-
-    return make_response(jsonify({"message":"Unauthorized"}), 401)
-
 ### Stash Routes ###
 
 @app.route('/api/stashes', methods=['GET'])
