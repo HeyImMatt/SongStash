@@ -8,7 +8,7 @@ import './AppNav.css';
 
 export default function AppNav() {
   const dispatch = useDispatch();
-  const user = useSelector(store => store.user)
+  const stashes = useSelector(store => store.stash.stashes)
   const clearSong = () => {
     dispatch({
       type: CLEAR_CURRENT_SONG,
@@ -23,7 +23,7 @@ export default function AppNav() {
           <hr />
           <NavItem className="mx-auto my-auto">
             <NavbarText>My Stashes  <Link to="/stash/createstash"><AddCircle /></Link></NavbarText>
-            {user.stashes.map(stash => (<Link to={`/stash/${stash.id}`}><NavLink>{stash.name}</NavLink></Link>))}
+            {stashes.map(stash => (<Link to={`/stash/${stash.id}`}><NavLink>{stash.name}</NavLink></Link>))}
           </NavItem>
           <hr />
           <NavItem className="mx-auto my-auto">

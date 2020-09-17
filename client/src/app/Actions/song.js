@@ -6,7 +6,6 @@ const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 export function fetchUserSongs() {
   return async function (dispatch) {
     const resp = await axios.get(`${API_URL}/songs`);
-    console.log(resp.data)
     const songs = htmlify(resp.data.songs);
     return dispatch(fetchedUserSongs(songs));
   }

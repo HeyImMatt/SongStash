@@ -13,3 +13,4 @@ export const CLEAR_SEARCH_RESULTS = 'CLEAR_SEARCH_RESULTS';
 
 // Stash types
 export const SET_STASHES = 'SET_STASHES';
+export const SET_NEW_STASH = 'SET_NEW_STASH';

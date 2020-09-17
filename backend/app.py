@@ -132,7 +132,24 @@ def get_user_songs_stashes_info(user_id):
 
     return make_response(jsonify({"message":"Unauthorized"}), 401)
 
-### Stash Routes ###    
+### Stash Routes ###
+
+@app.route('/api/stashes', methods=['GET'])
+def get_stashes():
+    """Get all user stashes"""
+
+    if g.user:
+        user_id = int(g.user.id)
+        user = User.query.get_or_404(user_id)
+        stashes = [s.serialize() for s in user.stashes]
+
+        data = {
+            "stashes": stashes
+        }
+        
+        return make_response(jsonify(data), 200)
+
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/stashes', methods=['POST'])
 def add_stash():

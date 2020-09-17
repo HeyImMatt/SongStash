@@ -6,7 +6,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 
 export default function SongList({ songs, getLyrics }) {
   // Note: pass in songs from My Songs or Search containers and then remove user line below
-  const user = useSelector((store) => store.user);
+  const userSongs = useSelector((store) => store.song.songs);
   const history = useHistory();
   const dispatch = useDispatch();
   const columns = [
@@ -37,7 +37,7 @@ export default function SongList({ songs, getLyrics }) {
   return <BootstrapTable 
   bootstrap4 
   keyField={songs ? 'mmId' : 'id'} 
-  data={songs || user.songs} 
+  data={songs || userSongs} 
   columns={columns} 
   defaultSorted={defaultSorted} 
   rowEvents={rowEvents}
