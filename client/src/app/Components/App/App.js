@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserDataFromApi } from '../../Actions/user';
+import { useDispatch } from 'react-redux';
 import { fetchUserStashes } from '../../Actions/stash';
 import { fetchUserSongs } from '../../Actions/song';
 import { Col, Row } from 'reactstrap';
