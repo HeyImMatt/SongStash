@@ -1,7 +1,8 @@
-from env_vars import MUSIX_MATCH_API_KEY
+import os
 import requests
 
 API_BASE_URL = 'http://api.musixmatch.com/ws/1.1/'
+MUSIX_MATCH_API_KEY = os.getenv('MUSIX_MATCH_API_KEY')
 
 def search_api(q_string):
     """Searches the MusixMatch API for songs and returns payload"""

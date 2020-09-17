@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation, Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import CreateStash from '../../Components/CreateStash/CreateStash';
 import { postNewStash } from '../../Actions/stash';
@@ -12,14 +12,13 @@ export default function StashContainer() {
   const dispatch = useDispatch();
   let location = useLocation();
   const history = useHistory();
-  const user = useSelector( store => store.user );
   const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
   const [isAdding, setIsAdding] = useState(false);
 
   useEffect(function() {
     async function addStash() {
       if (!formData.id) {
-        await dispatch(postNewStash(formData.name, user.id));
+        await dispatch(postNewStash(formData.name));
         setIsAdding(false);
         history.push('/');
       }
@@ -27,7 +26,7 @@ export default function StashContainer() {
     if (isAdding) {
       addStash();
     };
-  }, [dispatch, isAdding, formData, history, user]);
+  }, [dispatch, isAdding, formData, history]);
 
   const formHandler = (e) => {
     const {name, value} = e.target;

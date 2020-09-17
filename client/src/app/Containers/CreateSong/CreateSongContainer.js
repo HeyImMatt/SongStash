@@ -14,7 +14,6 @@ export default function CreateSongContainer() {
   };
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector( store => store.user );
   const song = useSelector( store => store.song );
   const lyrics = song.lyrics ? song.lyrics.replace(/<br\s*\/?>/mg,'\n') : null;
   const [formData, setFormData] = useState( {...song, lyrics} || DEFAULT_FORM_STATE);
@@ -23,7 +22,7 @@ export default function CreateSongContainer() {
   useEffect(function() {
     async function submitSong() {
       if (!formData.id) {
-        await dispatch(postNewSong(formData, user.id));
+        await dispatch(postNewSong(formData));
         setIsSubmitting(false);
         history.push('/song');
       }
@@ -31,7 +30,7 @@ export default function CreateSongContainer() {
     if (isSubmitting) {
       submitSong();
     };
-  }, [dispatch, isSubmitting, formData, user, history]);
+  }, [dispatch, isSubmitting, formData, history]);
 
   const formHandler = (e) => {
     const {name, value} = e.target;
