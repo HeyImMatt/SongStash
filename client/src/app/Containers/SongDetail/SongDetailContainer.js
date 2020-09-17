@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Col, Button } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { fetchUserStashes } from '../../Actions/stash';
 import { deleteSong } from '../../Actions/song';
-import { postSongToStash } from '../../Actions/stash';
+import { postSongToStash, deleteSongFromUserStash } from '../../Actions/stash';
 import MultiSelect from 'react-multi-select-component';
 import DeleteButton from '../../Components/DeleteButton/DeleteButton';
 import Song from '../../Components/Song/Song';
@@ -30,10 +30,21 @@ export default function SongDetailContainer() {
   }
 
   async function updateHandler() {
-    const stashIds = [];
-    selected.forEach(stash => stashIds.push(stash.value));
-    await postSongToStash(stashIds, song.id);
-    dispatch(fetchUserStashes());
+    const newStashIds = [];
+    const deleteStashIds = [];
+    selected.forEach((stash) => {
+      if (!songStashes.includes(stash)) {
+        newStashIds.push(stash.value)
+      }
+    });
+    songStashes.forEach((stash) => {
+      if (!selected.includes(stash)) {
+        deleteStashIds.push(stash.value)
+      }
+    })
+    await postSongToStash(newStashIds, song.id);
+    await deleteSongFromUserStash(deleteStashIds, song.id);
+    await dispatch(fetchUserStashes());
   }
 
   return (

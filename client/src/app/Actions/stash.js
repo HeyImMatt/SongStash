@@ -24,6 +24,12 @@ export function postSongToStash(stashIds, songId) {
   });
 };
 
+export function deleteSongFromUserStash(stashIds, songId) {
+  stashIds.forEach(async (stashId) => {
+    await SongStashApi.deleteSongFromStash(songId, stashId);
+  });
+}
+
 export function setStashes(data) {
   return {
     type: SET_STASHES,

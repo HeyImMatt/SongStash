@@ -11,4 +11,13 @@ export default class SongStashApi {
         return null;
     }
   }
+
+  static async deleteSongFromStash(songId, stashId) {
+    try {
+      await axios.delete(`${API_URL}/stashes/songs/${stashId}/${songId}`);
+      return {songId, stashId};
+    } catch {
+        return null;
+    }
+  }
 }

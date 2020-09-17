@@ -196,8 +196,8 @@ def add_song_to_stash():
     """Adds a song to a stash"""
 
     if g.user:
-        song_id = int(request.json['song_id'])
-        stash_id = int(request.json['stash_id'])
+        song_id = int(request.json['songId'])
+        stash_id = int(request.json['stashId'])
         user_id = int(g.user.id)
 
         song = Song.query.get_or_404(song_id)
@@ -214,13 +214,13 @@ def add_song_to_stash():
 
     return 401
 
-@app.route('/api/stashes/songs/<int:id>', methods=['DELETE'])
-def delete_song_from_stash(id):
+@app.route('/api/stashes/songs/<int:stash_id>/<int:song_id>', methods=['DELETE'])
+def delete_song_from_stash(stash_id, song_id):
     """Delete song from stash"""
 
     if g.user:
         user_id = int(g.user.id)
-        stash_song = StashSong.query.get_or_404(id)
+        stash_song = StashSong.query.filter(StashSong.stash_id == stash_id, StashSong.song_id == song_id).first()
         stash = Stash.query.get_or_404(stash_song.stash_id)
 
         if stash.user_id == user_id:
