@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 export default function Song({ song }) {
   return (
     <>
+      <hr />
       <h3>{song.title}</h3>
       <h5>{song.artist}</h5>
+      <hr />
       <span id="lyrics" className="mt-3" dangerouslySetInnerHTML = {{__html: song.lyrics}}></span>
       {
         song.lyricsLocation &&

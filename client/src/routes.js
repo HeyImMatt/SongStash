@@ -21,7 +21,7 @@ export default function Routes() {
       <Route path="/song" exact>
         <SongDetailContainer />
       </Route>
-      <Route path="/stash" >
+      <Route path="/stash/:id" >
         <StashContainer />
       </Route>
       <Redirect to="/" />

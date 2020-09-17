@@ -1,4 +1,5 @@
 import axios from 'axios';
+import SongStashApi from '../../SongStashApi';
 import { SET_STASHES, SET_NEW_STASH } from './types';
 
 const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
@@ -16,6 +17,12 @@ export function postNewStash(name) {
     return dispatch(setNewStash(resp.data));
   }
 }
+
+export function postSongToStash(stashIds, songId) {
+  stashIds.forEach(async (stashId) => {
+    await SongStashApi.addSongToStash(songId, stashId);
+  });
+};
 
 export function setStashes(data) {
   return {

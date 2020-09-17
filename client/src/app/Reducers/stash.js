@@ -1,6 +1,6 @@
 import { 
   SET_STASHES,
-  SET_NEW_STASH, 
+  SET_NEW_STASH,
 } from '../Actions/types';
 
 const INITIAL_STATE = {}
