@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Col } from 'reactstrap';
+import SongList from '../../Components/SongList/SongList';
 import CreateStash from '../../Components/CreateStash/CreateStash';
 import { postNewStash } from '../../Actions/stash';
 
@@ -9,6 +10,11 @@ export default function StashContainer() {
   const DEFAULT_FORM_STATE = {
     name: '',
   };
+  const { id } = useParams();
+  const stashes = useSelector(store => store.stash.stashes);
+  const songs = useSelector(store => store.song.songs);
+  const stash = stashes.filter(stash => stash.id === parseInt(id))[0];
+  const stashSongs = songs.filter(song => stash.song_ids.includes(song.id));
   const dispatch = useDispatch();
   let location = useLocation();
   const history = useHistory();
@@ -46,6 +52,12 @@ export default function StashContainer() {
       <div className="my-3">
         { location.pathname === '/stash/createstash' && <CreateStash formData={formData} formHandler={formHandler} submitHandler={submitHandler} />}
       </div>
+      {location.pathname === `/stash/${id}` &&
+      <> 
+        <h5 className="my-3">{stash.name}</h5>
+        <SongList songs={stashSongs} />
+      </>
+      }
     </Col>
   )
 }
