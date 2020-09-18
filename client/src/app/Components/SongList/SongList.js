@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentSong } from '../../Actions/song';
 import { useHistory } from 'react-router-dom';
 import BootstrapTable from 'react-bootstrap-table-next';
 
@@ -29,8 +28,8 @@ export default function SongList({ songs, getLyrics }) {
     onClick: (e, row, rowIndex) => {
       if (songs) {
         dispatch(getLyrics(row));
-      } else dispatch(setCurrentSong(row));
-      history.push('/song');
+        history.push('/song');
+      } else history.push(`/song/${row.id}`);
     }
   };
 

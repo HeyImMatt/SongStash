@@ -18,7 +18,10 @@ export default function Routes() {
       <Route path="/searchsongs" exact>
         <SearchSongContainer />
       </Route>
-      <Route path="/song" exact>
+      <Route path="/song/:id">
+        <SongDetailContainer />
+      </Route>
+      <Route path="/song">
         <SongDetailContainer />
       </Route>
       <Route path="/stash/:id" >

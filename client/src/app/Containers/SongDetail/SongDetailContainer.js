@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Col, Button } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { fetchUserStashes } from '../../Actions/stash';
-import { deleteSong } from '../../Actions/song';
+import { deleteSong, setCurrentSong } from '../../Actions/song';
 import { postSongToStash, deleteSongFromUserStash } from '../../Actions/stash';
 import MultiSelect from 'react-multi-select-component';
 import DeleteButton from '../../Components/DeleteButton/DeleteButton';
@@ -12,6 +12,18 @@ import Song from '../../Components/Song/Song';
 export default function SongDetailContainer() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const songs = useSelector( store => store.song.songs );
+
+  useEffect(function() {
+    if (id) {
+      const songToSet = songs.filter(song => song.id === parseInt(id));
+      if (!!songToSet[0]) {
+        dispatch(setCurrentSong(songToSet[0]));
+      } else history.push('/mysongs');
+    };
+  },[dispatch, history, id, songs])
+
   const song = useSelector( store => store.song );
   const stashes = useSelector( store => store.stash.stashes)
   const songStashes = stashes.reduce((acc, stash) => {
@@ -44,13 +56,14 @@ export default function SongDetailContainer() {
     })
     await postSongToStash(newStashIds, song.id);
     await deleteSongFromUserStash(deleteStashIds, song.id);
-    await dispatch(fetchUserStashes());
+    await dispatch(await fetchUserStashes());
   }
 
   return (
     <>
       <Col md={10} className="d-flex mt-3 justify-content-between">
         <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
+        {id && <>
         <h5 className="d-inline-block ml-2 my-auto">Stashes:</h5>
         <MultiSelect
         hasSelectAll={false}
@@ -62,6 +75,7 @@ export default function SongDetailContainer() {
         />
         <Button color="warning" className="ml-2" onClick={updateHandler}>Update</Button>
         <DeleteButton text="Delete Song" classes="ml-auto" clickHandler={deleteHandler} />
+        </>}
       </Col>
       <Col md={10} className="text-center mx-auto mt-5">
         <Song song={song} />
