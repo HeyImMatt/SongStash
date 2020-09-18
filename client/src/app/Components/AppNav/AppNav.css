@@ -6,3 +6,16 @@ hr {
   background-color: white;
   width: 100%;
 }
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  background-color: var(--primary);
+  padding-left: .5em;
+  padding-right: .5em;
+}
+
+.navbar-dark .navbar-nav .active>.nav-link, 
+.navbar-dark .navbar-nav .nav-link.active, 
+.navbar-dark .navbar-nav .nav-link.show, 
+.navbar-dark .navbar-nav .show>.nav-link {
+  color: var(--dark);
+}
