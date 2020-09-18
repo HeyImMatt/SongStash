@@ -3,14 +3,14 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import CreateSongContainer from './app/Containers/CreateSong/CreateSongContainer';
 import SongDetailContainer from './app/Containers/SongDetail/SongDetailContainer';
 import SearchSongContainer from './app/Containers/SearchSong/SearchSongContainer';
-import SongList from './app/Components/SongList/SongList';
+import MySongsContainer from './app/Containers/MySongs/MySongsContainer';
 import StashContainer from './app/Containers/Stash/StashContainer';
 
 export default function Routes() {
   return (
     <Switch>
       <Route path="/mysongs" exact>
-        <SongList />
+        <MySongsContainer />
       </Route>
       <Route path="/createsong" exact>
         <CreateSongContainer />
@@ -27,7 +27,7 @@ export default function Routes() {
       <Route path="/stash/:id" >
         <StashContainer />
       </Route>
-      <Redirect to="/" />
+      <Redirect to="/mysongs" />
     </Switch>
   )
 }

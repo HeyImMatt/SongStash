@@ -18,7 +18,7 @@ export default function AppNav() {
   return (
     <>
       <Navbar id="main-nav-bar" color="dark" dark >
-        <NavbarBrand className="mx-auto w-100 text-center" href="/">SongStash</NavbarBrand>
+        <NavbarBrand className="mx-auto w-100 text-center" href="/mysongs">SongStash</NavbarBrand>
         <Nav navbar pills justified className="h-75 w-100">
           <hr />
           <NavItem className="mx-auto my-auto">
