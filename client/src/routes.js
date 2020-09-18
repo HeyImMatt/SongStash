@@ -5,6 +5,7 @@ import SongDetailContainer from './app/Containers/SongDetail/SongDetailContainer
 import SearchSongContainer from './app/Containers/SearchSong/SearchSongContainer';
 import MySongsContainer from './app/Containers/MySongs/MySongsContainer';
 import StashContainer from './app/Containers/Stash/StashContainer';
+import CreateStashContainer from './app/Containers/CreateStash/CreateStashContainer';
 
 export default function Routes() {
   return (
@@ -23,6 +24,9 @@ export default function Routes() {
       </Route>
       <Route path="/song">
         <SongDetailContainer />
+      </Route>
+      <Route path="/stash/createstash" exact>
+        <CreateStashContainer />
       </Route>
       <Route path="/stash/:id" >
         <StashContainer />

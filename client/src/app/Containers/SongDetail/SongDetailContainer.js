@@ -61,7 +61,7 @@ export default function SongDetailContainer() {
 
   return (
     <>
-      <Col md={10} className="d-flex mt-3 justify-content-between">
+      <Col md={12} className="d-flex mt-3 justify-content-between">
         <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
         {id && <>
         <h5 className="d-inline-block ml-2 my-auto">Stashes:</h5>
