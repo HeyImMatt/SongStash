@@ -4,7 +4,7 @@ import { Col, Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { fetchUserStashes } from '../../Actions/stash';
 import { deleteSong, setCurrentSong } from '../../Actions/song';
-import { postSongToStash, deleteSongFromUserStash } from '../../Actions/stash';
+import SongStashApi from '../../../SongStashApi';
 import MultiSelect from 'react-multi-select-component';
 import DeleteButton from '../../Components/DeleteButton/DeleteButton';
 import Song from '../../Components/Song/Song';
@@ -13,21 +13,22 @@ export default function SongDetailContainer() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { id } = useParams();
+  const songId = parseInt(id)
   const songs = useSelector( store => store.song.songs );
+  const stashes = useSelector( store => store.stash.stashes)
+  const song = useSelector( store => store.song );
 
   useEffect(function() {
-    if (id) {
-      const songToSet = songs.filter(song => song.id === parseInt(id));
-      if (!!songToSet[0]) {
-        dispatch(setCurrentSong(songToSet[0]));
+    if (songId) {
+      const songToSet = songs.filter(song => song.id === songId)[0];
+      if (!!songToSet) {
+        dispatch(setCurrentSong(songToSet));
       } else history.push('/mysongs');
     };
-  },[dispatch, history, id, songs])
+  },[dispatch, history, songId, songs])
 
-  const song = useSelector( store => store.song );
-  const stashes = useSelector( store => store.stash.stashes)
   const songStashes = stashes.reduce((acc, stash) => {
-    if (stash.song_ids.includes(song.id)) {
+    if (stash.song_ids.includes(songId)) {
       acc.push({label: stash.name, value: stash.id})
       return acc;
     }
@@ -42,20 +43,17 @@ export default function SongDetailContainer() {
   }
 
   async function updateHandler() {
-    const newStashIds = [];
-    const deleteStashIds = [];
-    selected.forEach((stash) => {
+    // Need to revisit this logic. Not quite working for stash updating.
+    selected.forEach(async (stash) => {
       if (!songStashes.includes(stash)) {
-        newStashIds.push(stash.value)
+        await SongStashApi.addSongToStash(song.id, stash.value);
       }
     });
-    songStashes.forEach((stash) => {
+    songStashes.forEach(async (stash) => {
       if (!selected.includes(stash)) {
-        deleteStashIds.push(stash.value)
+        await SongStashApi.deleteSongFromStash(song.id, stash.value);
       }
     })
-    await postSongToStash(newStashIds, song.id);
-    await deleteSongFromUserStash(deleteStashIds, song.id);
     await dispatch(await fetchUserStashes());
   }
 
