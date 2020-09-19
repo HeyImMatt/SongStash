@@ -38,4 +38,15 @@ export default class SongStashApi {
         return null;
     }
   }
+
+  static async editSong(id, song) {
+    const {title, artist, lyrics} = song;
+    try {
+      await axios.patch(`${API_URL}/songs/${id}`, {title, artist, lyrics});
+      return true;
+    } catch {
+        return null;
+    }
+  }
+
 }

@@ -14,7 +14,7 @@ export default function Song({ song }) {
         song.lyricsLocation &&
         <div className="mt-3">
           <p>Lyrics preview provided by MusixMatch. Right song? Click below to add to your songs. You will be able to edit and add more lyrics on the next screen.</p>
-          <Link to="/createsong"><Button className="mt-2">Add to My Songs</Button></Link>
+          <Link to="/createsong"><Button className="mt-2" color="warning">Add to My Songs</Button></Link>
         </div>
       }
     </>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Col, Button } from 'reactstrap';
+import { Col } from 'reactstrap';
 import StashNameForm from '../../Components/StashNameForm/StashNameForm';
 import { postNewStash } from '../../Actions/stash';
 

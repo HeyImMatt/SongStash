@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import CreateSongContainer from './app/Containers/CreateSong/CreateSongContainer';
+import CreateEditSongContainer from './app/Containers/CreateEditSong/CreateEditSongContainer';
 import SongDetailContainer from './app/Containers/SongDetail/SongDetailContainer';
 import SearchSongContainer from './app/Containers/SearchSong/SearchSongContainer';
 import MySongsContainer from './app/Containers/MySongs/MySongsContainer';
@@ -14,15 +14,12 @@ export default function Routes() {
         <MySongsContainer />
       </Route>
       <Route path="/createsong" exact>
-        <CreateSongContainer />
+        <CreateEditSongContainer />
       </Route>
       <Route path="/searchsongs" exact>
         <SearchSongContainer />
       </Route>
       <Route path="/song/:id">
-        <SongDetailContainer />
-      </Route>
-      <Route path="/song">
         <SongDetailContainer />
       </Route>
       <Route path="/stash/createstash" exact>

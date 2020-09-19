@@ -4,6 +4,7 @@ import { Col, Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { fetchUserStashes } from '../../Actions/stash';
 import { deleteSong, setCurrentSong } from '../../Actions/song';
+import CreateEditSongContainer from '../CreateEditSong/CreateEditSongContainer';
 import SongStashApi from '../../../SongStashApi';
 import MultiSelect from 'react-multi-select-component';
 import DeleteButton from '../../Components/DeleteButton/DeleteButton';
@@ -17,6 +18,8 @@ export default function SongDetailContainer() {
   const songs = useSelector( store => store.song.songs );
   const stashes = useSelector( store => store.stash.stashes)
   const song = useSelector( store => store.song );
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => setIsEditing(!isEditing)
 
   useEffect(function() {
     if (songId) {
@@ -69,14 +72,16 @@ export default function SongDetailContainer() {
         value={selected}
         onChange={setSelected}
         labelledBy={"Select Stashes"}
-        className="d-inline-block ml-2 w-50"
+        className="d-inline-block ml-2 w-25"
         />
         <Button color="warning" className="ml-2" onClick={updateHandler}>Update</Button>
+        <Button color="info" className="ml-2" onClick={toggleEdit}>Edit Song</Button>
         <DeleteButton text="Delete Song" classes="ml-auto" clickHandler={deleteHandler} />
         </>}
       </Col>
       <Col md={10} className="text-center mx-auto mt-5">
-        <Song song={song} />
+        {!isEditing && <Song song={song} />}
+        {isEditing && <CreateEditSongContainer toggleEdit={toggleEdit} editSong={true} />}
       </Col>
     </>
   )
