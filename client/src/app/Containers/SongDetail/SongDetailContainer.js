@@ -46,7 +46,6 @@ export default function SongDetailContainer() {
   }
 
   async function updateHandler() {
-    // Need to revisit this logic. Not quite working for stash updating.
     selected.forEach(async (stash) => {
       if (!songStashes.includes(stash)) {
         await SongStashApi.addSongToStash(song.id, stash.value);
@@ -58,6 +57,7 @@ export default function SongDetailContainer() {
       }
     })
     await dispatch(await fetchUserStashes());
+    window.location.reload(); // Last resort option to get the stashes list updating correctly
   }
 
   return (
@@ -74,8 +74,8 @@ export default function SongDetailContainer() {
         labelledBy={"Select Stashes"}
         className="d-inline-block ml-2 w-25"
         />
-        <Button color="warning" className="ml-2" onClick={updateHandler}>Update</Button>
-        <Button color="info" className="ml-2" onClick={toggleEdit}>Edit Song</Button>
+        <Button color="warning" className="ml-2" onClick={updateHandler}>Update Stashes</Button>
+        <Button color="info" className="mx-auto" onClick={toggleEdit}>Edit Song</Button>
         <DeleteButton text="Delete Song" classes="ml-auto" clickHandler={deleteHandler} />
         </>}
       </Col>
