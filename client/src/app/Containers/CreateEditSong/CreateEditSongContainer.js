@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col } from 'reactstrap';
@@ -18,21 +18,6 @@ export default function CreateEditSongContainer({ editSong, toggleEdit }) {
   const song = useSelector( store => store.song );
   const lyrics = song.lyrics ? song.lyrics.replace(/<br\s*\/?>/mg,'\n') : null;
   const [formData, setFormData] = useState( {...song, lyrics} || DEFAULT_FORM_STATE);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(function() {
-    async function submitSong() {
-      if (!formData.id) {
-        await dispatch(postNewSong(formData));
-        await dispatch(fetchUserSongs());
-        setIsSubmitting(false);
-        history.replace(`/song/${song.id}`);
-      }
-    };
-    if (isSubmitting) {
-      submitSong();
-    };
-  }, [dispatch, isSubmitting, formData, history, song]);
 
   const formHandler = (e) => {
     const {name, value} = e.target;
@@ -46,9 +31,12 @@ export default function CreateEditSongContainer({ editSong, toggleEdit }) {
     e.preventDefault();
     if (editSong) {
       await SongStashApi.editSong(song.id, formData);
-      dispatch(fetchUserSongs());
       toggleEdit();
-    } else setIsSubmitting(true);
+    } else {
+      await dispatch(await postNewSong(formData));
+    }
+    await dispatch(await fetchUserSongs());
+    history.replace(`/song/${song.id}`);
   }
 
   return (
