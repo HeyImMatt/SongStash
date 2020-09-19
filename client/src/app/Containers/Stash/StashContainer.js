@@ -1,40 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Col, Button } from 'reactstrap';
 import DeleteButton from '../../Components/DeleteButton/DeleteButton';
 import SongList from '../../Components/SongList/SongList';
-import CreateStash from '../../Components/CreateStash/CreateStash';
+import StashNameForm from '../../Components/StashNameForm/StashNameForm';
 import SongStashApi from '../../../SongStashApi';
-import { postNewStash, fetchUserStashes } from '../../Actions/stash';
+import { fetchUserStashes } from '../../Actions/stash';
+import EditIcon from '@material-ui/icons/Edit';
 
 export default function StashContainer() {
-  const DEFAULT_FORM_STATE = {
-    name: '',
-  };
   const { id } = useParams();
   const stashes = useSelector(store => store.stash.stashes);
   const songs = useSelector(store => store.song.songs);
   const stash = stashes.filter(stash => stash.id === parseInt(id))[0];
   const stashSongs = songs.filter(song => stash.song_ids.includes(song.id));
   const dispatch = useDispatch();
-  let location = useLocation();
   const history = useHistory();
-  const [formData, setFormData] = useState(DEFAULT_FORM_STATE);
-  const [isAdding, setIsAdding] = useState(false);
+  const [formData, setFormData] = useState();
+  const [isEditing, setIsEditing] = useState(false);
+  const toggleEdit = () => setIsEditing(!isEditing)
 
-  useEffect(function() {
-    async function addStash() {
-      if (!formData.id) {
-        await dispatch(postNewStash(formData.name));
-        setIsAdding(false);
-        history.push('/');
-      }
-    };
-    if (isAdding) {
-      addStash();
-    };
-  }, [dispatch, isAdding, formData, history]);
+  useEffect(() => {
+    setFormData({name: stash.name})
+  }, [setFormData, stash.name])
 
   const formHandler = (e) => {
     const {name, value} = e.target;
@@ -44,9 +33,11 @@ export default function StashContainer() {
     }));
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setIsAdding(true);
+    await SongStashApi.editStash(id, formData.name)
+    setIsEditing(false);
+    dispatch(fetchUserStashes());
   }
 
   async function deleteHandler() {
@@ -55,26 +46,25 @@ export default function StashContainer() {
     history.goBack();
   }
 
+
   return (
     <>
-    <Col md={12} className="d-flex mt-3 justify-content-between">
-      <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
-      {id && 
-      <>
+      <Col md={12} className="d-flex mt-3 justify-content-between">
+        <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
         <DeleteButton text="Delete Stash" classes="ml-auto" clickHandler={deleteHandler} />
-      </>}
-    </Col>
-    <Col md={10} className="text-center mx-auto">
-      <div className="my-3">
-        { location.pathname === '/stash/createstash' && <CreateStash formData={formData} formHandler={formHandler} submitHandler={submitHandler} />}
-      </div>
-      {location.pathname === `/stash/${id}` &&
-      <> 
-        <h5 className="my-3">{stash.name}</h5>
+      </Col>
+      <Col md={10} className="text-center mx-auto my-3">
+        {!isEditing && <h5 className="d-inline-block mr-2">{stash.name}</h5>}
+        {isEditing && 
+        <StashNameForm 
+        cancelAction={toggleEdit} 
+        formData={formData} 
+        formHandler={formHandler} 
+        submitHandler={submitHandler} 
+        text="Update" />}
+        {!isEditing && <EditIcon className="mb-2" fontSize="small" onClick={toggleEdit} style={{cursor: "pointer"}} />}
         <SongList songs={stashSongs} />
-      </>
-      }
-    </Col>
-  </>
+      </Col>
+    </>
   )
 }

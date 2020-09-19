@@ -29,4 +29,13 @@ export default class SongStashApi {
         return null;
     }
   }
+
+  static async editStash(id, name) {
+    try {
+      await axios.patch(`${API_URL}/stashes/${id}`, {name});
+      return true;
+    } catch {
+        return null;
+    }
+  }
 }

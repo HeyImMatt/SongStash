@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Col, Button } from 'reactstrap';
-import CreateStash from '../../Components/CreateStash/CreateStash';
+import StashNameForm from '../../Components/StashNameForm/StashNameForm';
 import { postNewStash } from '../../Actions/stash';
 
 export default function CreateStashContainer() {
@@ -40,16 +40,14 @@ export default function CreateStashContainer() {
     setIsAdding(true);
   }
 
+  const cancelAction = () => history.goBack();
+
 
   return (
     <>
-    <Col md={12} className="d-flex mt-3 justify-content-between">
-      <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
-    </Col>
-    <Col md={10} className="text-center mx-auto">
-      <div className="my-3">
-        <CreateStash formData={formData} formHandler={formHandler} submitHandler={submitHandler} />
-      </div>
+    <Col md={10} className="text-center mx-auto my-3">
+      <h4>Create Stash</h4>
+      <StashNameForm  cancelAction={cancelAction} formData={formData} formHandler={formHandler} submitHandler={submitHandler} text="Create Stash" />
     </Col>
   </>
   )
