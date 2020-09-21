@@ -1,12 +1,10 @@
-import axios from 'axios';
 import { SET_SEARCH_RESULTS } from './types';
-
-const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
+import SongStashApi from '../../SongStashApi';
 
 export function searchSongsApi(query) {
   return async function(dispatch) {
-    const resp = await axios.get(`${API_URL}/search/${encodeURI(query)}`);
-    return dispatch(setSearchResults(resp.data));
+    const data = await SongStashApi.searchSongs(query);
+    return dispatch(setSearchResults(data));
   }
 }
 

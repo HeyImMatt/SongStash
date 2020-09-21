@@ -49,4 +49,13 @@ export default class SongStashApi {
     }
   }
 
+  static async searchSongs(query) {
+    try {
+      const resp = await axios.get(`${API_URL}/search/${encodeURI(query)}`);
+      return resp.data
+    } catch {
+      return null;
+    }
+  }
+
 }
