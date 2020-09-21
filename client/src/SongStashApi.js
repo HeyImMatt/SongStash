@@ -3,6 +3,8 @@ import axios from 'axios';
 const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 
 export default class SongStashApi {
+  // Stash Actions
+
   static async addSongToStash(songId, stashId) {
     try {
       await axios.post(`${API_URL}/stashes/songs`, {songId, stashId});
@@ -38,6 +40,25 @@ export default class SongStashApi {
         return null;
     }
   }
+  //Song Actions
+
+  static async fetchSongs() {
+    try {
+      const resp = await axios.get(`${API_URL}/songs`);
+      return resp.data.songs;
+    } catch {
+        return null;
+    }
+  }
+
+  static async postSong(song, userId) {
+    try {
+      const resp = await axios.post(`${API_URL}/songs`, {...song, user_id: userId});
+      return resp.data;
+    } catch {
+        return null;
+    }
+  }
 
   static async editSong(id, song) {
     const {title, artist, lyrics} = song;
@@ -48,6 +69,8 @@ export default class SongStashApi {
         return null;
     }
   }
+
+  // Search Actions
 
   static async searchSongs(query) {
     try {
