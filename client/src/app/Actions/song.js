@@ -1,8 +1,5 @@
-import axios from 'axios';
 import { SET_CURRENT_SONG, DELETE_SONG, FETCH_USER_SONGS } from './types';
 import SongStashApi from '../../SongStashApi';
-
-const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 
 export function fetchUserSongs() {
   return async function (dispatch) {
@@ -22,18 +19,17 @@ export function postNewSong(song, userId) {
 
 export function deleteSong(id) {
   return async function(dispatch) {
-    const resp = await axios.delete(`${API_URL}/songs/${id}`)
-    if (resp.status === "200") {
+    const resp = await SongStashApi.deleteSong(id);
+    if (resp) {
       return dispatch(deletedSong())
     }
-
   }
 }
 
 export function getLyrics(song) {
   return async function(dispatch) {
-    const resp = await axios.get(`${API_URL}/lyrics/${song.mmId}`);
-    const lyrics = resp.data.replace(/\n/g, '<br />');
+    const data = await SongStashApi.getSongLyrics(song.mmId);
+    const lyrics = data.replace(/\n/g, '<br />');
     return dispatch(setCurrentSong({...song, lyrics}));
   }
 }

@@ -9,8 +9,9 @@ export default class SongStashApi {
     try {
       await axios.post(`${API_URL}/stashes/songs`, {songId, stashId});
       return {songId, stashId};
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -18,8 +19,9 @@ export default class SongStashApi {
     try {
       await axios.delete(`${API_URL}/stashes/songs/${stashId}/${songId}`);
       return {songId, stashId};
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -27,8 +29,9 @@ export default class SongStashApi {
     try {
       await axios.delete(`${API_URL}/stashes/${id}`);
       return true;
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -36,8 +39,9 @@ export default class SongStashApi {
     try {
       await axios.patch(`${API_URL}/stashes/${id}`, {name});
       return true;
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
   //Song Actions
@@ -46,8 +50,9 @@ export default class SongStashApi {
     try {
       const resp = await axios.get(`${API_URL}/songs`);
       return resp.data.songs;
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -55,8 +60,9 @@ export default class SongStashApi {
     try {
       const resp = await axios.post(`${API_URL}/songs`, {...song, user_id: userId});
       return resp.data;
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -65,8 +71,29 @@ export default class SongStashApi {
     try {
       await axios.patch(`${API_URL}/songs/${id}`, {title, artist, lyrics});
       return true;
-    } catch {
-        return null;
+    } 
+    catch {
+      return null;
+    }
+  }
+
+  static async deleteSong(id) {
+    try {
+      await axios.delete(`${API_URL}/songs/${id}`)
+      return true;
+    } 
+    catch {
+      return null;
+    }
+  }
+
+  static async getSongLyrics(id) {
+    try {
+      const resp = await axios.get(`${API_URL}/lyrics/${id}`);
+      return resp.data;
+    } 
+    catch {
+      return null;
     }
   }
 
@@ -75,8 +102,9 @@ export default class SongStashApi {
   static async searchSongs(query) {
     try {
       const resp = await axios.get(`${API_URL}/search/${encodeURI(query)}`);
-      return resp.data
-    } catch {
+      return resp.data;
+    } 
+    catch {
       return null;
     }
   }
