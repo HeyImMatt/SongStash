@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Col, Button } from 'reactstrap';
 import { useHistory, useParams } from 'react-router-dom';
 import { fetchUserStashes } from '../../Actions/stash';
-import { deleteSong, setCurrentSong } from '../../Actions/song';
+import { deleteSong, setCurrentSong, fetchUserSongs } from '../../Actions/song';
 import CreateEditSongContainer from '../CreateEditSong/CreateEditSongContainer';
 import SongStashApi from '../../../SongStashApi';
 import MultiSelect from 'react-multi-select-component';
@@ -23,7 +23,7 @@ export default function SongDetailContainer() {
 
   // Sets song on page load or redirects back to mysongs
   useEffect(function() {
-    if (songId) {
+    if (songId && songs) {
       const songToSet = songs.filter(song => song.id === songId)[0];
       if (!!songToSet) {
         dispatch(setCurrentSong(songToSet));
@@ -43,6 +43,7 @@ export default function SongDetailContainer() {
 
   async function deleteHandler() {
     await dispatch(deleteSong(song.id));
+    await dispatch(fetchUserSongs());
     history.goBack();
   }
 
@@ -65,7 +66,7 @@ export default function SongDetailContainer() {
     <>
       <Col md={12} className="d-flex mt-3 justify-content-between">
         <Button className="mr-auto" onClick={() => history.goBack()}>Back</Button>
-        {id && <>
+        {song.id && <>
         <h5 className="d-inline-block ml-2 my-auto">Stashes:</h5>
         <MultiSelect
         hasSelectAll={false}
@@ -76,8 +77,8 @@ export default function SongDetailContainer() {
         className="d-inline-block ml-2 w-25"
         />
         <Button color="warning" className="ml-2" onClick={updateHandler}>Update Stashes</Button>
-        <Button color="info" className="mx-auto" onClick={toggleEdit}>Edit Song</Button>
-        <DeleteButton text="Delete Song" classes="ml-auto" clickHandler={deleteHandler} />
+        <Button color="info" className="ml-auto" onClick={toggleEdit}>Edit Song</Button>
+        <DeleteButton text="Delete Song" classes="ml-2" clickHandler={deleteHandler} />
         </>}
       </Col>
       <Col md={10} className="text-center mx-auto mt-5">

@@ -33,9 +33,9 @@ export default function CreateEditSongContainer({ editSong, toggleEdit }) {
       await SongStashApi.editSong(song.id, formData);
       toggleEdit();
     } else {
-      await dispatch(await postNewSong(formData));
+        await dispatch(postNewSong(formData));
     }
-    await dispatch(await fetchUserSongs());
+    await dispatch(fetchUserSongs());
     history.replace(`/song/${song.id}`);
   }
 
