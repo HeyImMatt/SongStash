@@ -5,6 +5,26 @@ const API_URL = process.env.SONG_STASH_API_URL || 'http://127.0.0.1:5000/api';
 export default class SongStashApi {
   // Stash Actions
 
+  static async fetchStashes() {
+    try {
+      const resp = await axios.get(`${API_URL}/stashes`);
+      return resp.data;
+    } 
+    catch {
+      return null;
+    }
+  }
+
+  static async postStash(name) {
+    try {
+      const resp = await axios.post(`${API_URL}/stashes`, {name});
+      return resp.data;
+    } 
+    catch {
+      return null;
+    }
+  }
+
   static async addSongToStash(songId, stashId) {
     try {
       await axios.post(`${API_URL}/stashes/songs`, {songId, stashId});
