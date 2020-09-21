@@ -17,13 +17,11 @@ export default function MySongsContainer() {
     return songs.filter(song => songIds.includes(song.id));
   }
 
-
-
   return (
     <Col md={8} className="text-center mx-auto">
       <div className="my-3">
         <h2>My Songs</h2>
-        {!songs && <h5>You don't have any songs yet. Click Song Search or Create Song to add some new ones!</h5>}
+        {songs.length === 0 && <h5 className="text-info">You don't have any songs yet.<br />Click Song Search or Create Song to add some new ones!</h5>}
       </div>
       {
         stashes.map(stash => (

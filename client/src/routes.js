@@ -16,14 +16,14 @@ export default function Routes() {
       <Route path="/createsong" exact>
         <CreateEditSongContainer />
       </Route>
+      <Route path="/createstash" exact>
+        <CreateStashContainer />
+      </Route>
       <Route path="/searchsongs" exact>
         <SearchSongContainer />
       </Route>
       <Route path="/song/:id">
         <SongDetailContainer />
-      </Route>
-      <Route path="/stash/createstash" exact>
-        <CreateStashContainer />
       </Route>
       <Route path="/stash/:id" >
         <StashContainer />

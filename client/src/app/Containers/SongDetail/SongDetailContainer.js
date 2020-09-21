@@ -21,6 +21,7 @@ export default function SongDetailContainer() {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing)
 
+  // Sets song on page load or redirects back to mysongs
   useEffect(function() {
     if (songId) {
       const songToSet = songs.filter(song => song.id === songId)[0];

@@ -10,20 +10,21 @@ import { fetchUserStashes } from '../../Actions/stash';
 import EditIcon from '@material-ui/icons/Edit';
 
 export default function StashContainer() {
-  const { id } = useParams();
-  const stashes = useSelector(store => store.stash.stashes);
-  const songs = useSelector(store => store.song.songs);
-  const stash = stashes.filter(stash => stash.id === parseInt(id))[0];
-  const stashSongs = songs.filter(song => stash.song_ids.includes(song.id));
   const dispatch = useDispatch();
   const history = useHistory();
+  const { id } = useParams();
+  const stashId = parseInt(id)
+  const stashes = useSelector(store => store.stash.stashes);
+  const stash = stashes.filter(stash => stash.id === stashId)[0];
+  const songs = useSelector(store => store.song.songs);
+  const stashSongs = songs.filter(song => stash.song_ids.includes(song.id));
   const [formData, setFormData] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing)
 
   useEffect(() => {
     setFormData({name: stash.name})
-  }, [setFormData, stash.name])
+  }, [setFormData, stash])
 
   const formHandler = (e) => {
     const {name, value} = e.target;
@@ -45,7 +46,6 @@ export default function StashContainer() {
     dispatch(fetchUserStashes());
     history.goBack();
   }
-
 
   return (
     <>

@@ -5,7 +5,6 @@ import { fetchUserSongs } from '../../Actions/song';
 import { Col, Row } from 'reactstrap';
 import AppNav from '../../Components/AppNav/AppNav';
 import Routes from '../../../routes';
-import './App.css';
 import loader from '../../../images/music-loader.gif';
 
 function App() {
@@ -35,8 +34,8 @@ function App() {
 
   return (
     <>
-      <Row>
-        <Col id="nav-col" md={2}>
+      <Row className="vh-100">
+        <Col md={2}>
           {!stashesLoading && <AppNav />}
         </Col>
         <Col md={10}>
