@@ -22,9 +22,12 @@ export default function StashContainer() {
   const [isEditing, setIsEditing] = useState(false);
   const toggleEdit = () => setIsEditing(!isEditing)
 
+  // Handles non-existent or unauthorized stash access and setting form data
   useEffect(() => {
-    setFormData({name: stash.name})
-  }, [setFormData, stash])
+    if (!stashId || !stash) {
+      history.goBack();
+    } else setFormData({name: stash.name})
+  }, [setFormData, stash, stashId, history])
 
   const formHandler = (e) => {
     const {name, value} = e.target;
@@ -54,7 +57,7 @@ export default function StashContainer() {
         <DeleteButton text="Delete Stash" classes="ml-auto" clickHandler={deleteHandler} />
       </Col>
       <Col md={10} className="text-center mx-auto my-3">
-        {!isEditing && <h5 className="d-inline-block mr-2">{stash.name}</h5>}
+        {!isEditing && stash && <h5 className="d-inline-block mr-2">{stash.name}</h5>}
         {isEditing && 
         <StashNameForm 
         cancelAction={toggleEdit} 
