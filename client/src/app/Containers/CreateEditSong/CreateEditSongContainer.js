@@ -32,12 +32,13 @@ export default function CreateEditSongContainer({ editSong, toggleEdit }) {
     if (editSong) {
       await SongStashApi.editSong(song.id, formData);
       toggleEdit();
+      await dispatch(fetchUserSongs());
+      history.replace(`/song/${song.id}`);
     } else {
         await dispatch(postNewSong(formData));
-    }
-    await dispatch(fetchUserSongs());
-    history.replace(`/song/${song.id}`);
-  }
+        history.replace('/mysongs'); // Song id is null so can't redirect to song detail
+    };
+  };
 
   return (
     <>

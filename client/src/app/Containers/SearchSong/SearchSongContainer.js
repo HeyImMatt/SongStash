@@ -49,7 +49,7 @@ export default function SearchSongContainer() {
       </div>
       <Form onSubmit={submitHandler}>
         <FormGroup>
-          <Input type="text" id="query" name="query" value={formData.query} onChange={formHandler} required />
+          <Input className="text-center" type="text" id="query" name="query" value={formData.query} onChange={formHandler} required />
         </FormGroup>
         <Button className="mb-3">Search</Button>
       </Form>
