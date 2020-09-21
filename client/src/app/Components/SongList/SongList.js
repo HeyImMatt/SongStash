@@ -26,7 +26,7 @@ export default function SongList({ songs, getLyrics }) {
     onClick: (e, row, rowIndex) => {
       if (getLyrics) {
         dispatch(getLyrics(row));
-        history.push('/song');
+        history.push(`/song/searchresult`);
       } else history.push(`/song/${row.id}`);
     }
   };
