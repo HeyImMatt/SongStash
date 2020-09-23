@@ -8,7 +8,7 @@ from models import db, Annotation, Song, SongAnnotation, Stash, StashSong, User,
 load_dotenv()
 os.environ['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_TEST_DATABASE_URI')
 
-from app import app, CURR_USER_KEY
+from app import app, CURR_USER_KEY, CURR_USER_NAME
 
 db.create_all()
 
@@ -130,3 +130,14 @@ class RoutesTestCases(TestCase):
             resp = c.post("/login", data=bad_userdata, follow_redirects=True)
 
             self.assertIn("Login Failed.", str(resp.data))
+
+    def test_user_logout(self):
+        """It should logout user"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+            
+            resp = c.get("/logout", follow_redirects=True)
+
+            self.assertIn("Log In", str(resp.data))
