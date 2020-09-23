@@ -3,10 +3,11 @@
 import os
 from unittest import TestCase
 from sqlalchemy import exc
-
+from dotenv import load_dotenv
 from models import db, Annotation, Song, SongAnnotation, Stash, StashSong, User, UserSong, UserStash
 
-os.environ['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_TEST_DATABASE_URI']
+load_dotenv()
+os.environ['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_TEST_DATABASE_URI')
 
 from app import app
 
@@ -76,3 +77,16 @@ class ModelTestCases(TestCase):
         # It should have a song with an annotation
         self.assertEqual(len(self.song.annotations), 1)
         self.assertEqual(self.song.annotations[0].annotation, "test annotation")
+
+    # Authentication Tests
+
+    def test_valid_authentication(self):
+        u = User.authenticate(self.user.username, "password")
+        self.assertIsNotNone(u)
+        self.assertEqual(u.id, self.uid)
+    
+    def test_invalid_username(self):
+        self.assertFalse(User.authenticate("badusername", "password"))
+
+    def test_wrong_password(self):
+        self.assertFalse(User.authenticate(self.user.username, "badpassword"))
