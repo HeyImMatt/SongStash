@@ -187,3 +187,45 @@ class RoutesTestCases(TestCase):
             resp = c.post("/api/stashes", json=stash_data)
 
             self.assertEqual(resp.status_code, 401)
+
+    def test_edit_stash(self):
+        """It should edit a stash if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            stash_data = {"name":"updated name"}
+
+            resp = c.patch("/api/stashes/22222", json=stash_data)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("22222", str(resp.data))
+
+    def test_edit_stash_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            stash_data = {"name":"updated name"}
+
+            resp = c.patch("/api/stashes/22222", json=stash_data)
+
+            self.assertEqual(resp.status_code, 401)
+
+    def test_delete_stash(self):
+        """It should delete a stash if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.delete("/api/stashes/22222")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Stash deleted", str(resp.data))
+
+    def test_delete_stash_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            resp = c.delete("/api/stashes/22222")
+
+            self.assertEqual(resp.status_code, 401)
