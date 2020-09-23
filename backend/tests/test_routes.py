@@ -63,13 +63,13 @@ class RoutesTestCases(TestCase):
         db.session.rollback()
         return res
 
-    # Login & Signup Routes
+    # Home, Signup, Login, and Logout Routes
 
     def test_logged_out_home_route(self):
         """It should render homepage for non-user"""
         with self.client as c:
             resp = c.get("/")
-            
+
             self.assertIn("Sign Up", str(resp.data))
 
     def test_logged_in_home_route(self):
@@ -102,3 +102,31 @@ class RoutesTestCases(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("You need to enable JavaScript to run this app.", str(resp.data))
+
+    def test_get_login_page(self):
+        """It should show login page"""
+        with self.client as c:
+            resp = c.get("/login")
+
+            self.assertIn("Login", str(resp.data))
+
+    def test_user_login_and_redirect(self):
+        """It should login user and redirect to app"""
+        with self.client as c:
+            good_userdata = {
+              "username": "testing",
+              "password": "password",
+            }
+            bad_userdata = {
+              "username": "nonexistent",
+              "password": "password",
+            }
+
+            resp = c.post("/login", data=good_userdata, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("You need to enable JavaScript to run this app.", str(resp.data))
+
+            resp = c.post("/login", data=bad_userdata, follow_redirects=True)
+
+            self.assertIn("Login Failed.", str(resp.data))
