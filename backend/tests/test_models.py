@@ -62,10 +62,10 @@ class ModelTestCases(TestCase):
         db.session.rollback()
         return res
 
-    def test_models(self):
-        """Do the basic models work?"""
+    # Assocation Tests
 
-        # It should have a user with a song and a stash
+    def test_user_associations(self):
+        """It should have a user with a song and a stash"""
         self.assertEqual(len(self.user.stashes), 1)
         self.assertEqual(self.user.stashes[0].name, "test stash name")
         self.assertEqual(len(self.user.songs), 1)
@@ -90,3 +90,36 @@ class ModelTestCases(TestCase):
 
     def test_wrong_password(self):
         self.assertFalse(User.authenticate(self.user.username, "badpassword"))
+
+    # Serialization Tests
+
+    def test_annotation_serialization(self):
+        data = self.annotation.serialize()
+        json = {
+            "id": self.annotation.id,
+            "annotation": self.annotation.annotation,
+            "lyric_index": self.annotation.lyric_index,
+            "user_id": self.annotation.user_id,
+            "song_id": self.annotation.song_id,
+        }
+        self.assertEqual(data, json)
+
+    def test_song_serialization(self):
+        data = self.song.serialize()
+        json = {
+            "id": self.song.id,
+            "title": self.song.title,
+            "artist": self.song.artist,
+            "lyrics": self.song.lyrics,
+            "user_id": self.song.user_id,
+        }
+        self.assertEqual(data, json)
+
+    def test_stash_serialization(self):
+        data = self.stash.serialize()
+        json = {
+            "id": self.stash.id,
+            "name": self.stash.name,
+            "song_ids": [11111],
+        }
+        self.assertEqual(data, json)
