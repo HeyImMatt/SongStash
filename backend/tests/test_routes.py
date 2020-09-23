@@ -331,3 +331,53 @@ class RoutesTestCases(TestCase):
             resp = c.post("/api/songs", json=song_data)
 
             self.assertEqual(resp.status_code, 401)
+
+    def test_edit_song(self):
+        """It should edit a song if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            song_data = {
+                "title":"updated title",
+                "artist":"test artist",
+                "lyrics":"test lyrics",
+            }
+
+            resp = c.patch("/api/songs/11111", json=song_data)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("11111", str(resp.data))
+
+    def test_edit_song_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            song_data = {
+                "title":"updated title",
+                "artist":"test artist",
+                "lyrics":"test lyrics",
+            }
+
+            resp = c.patch("/api/songs/11111", json=song_data)
+
+            self.assertEqual(resp.status_code, 401)
+
+    def test_delete_song(self):
+        """It should delete a song if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.delete("/api/songs/11111")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Song deleted", str(resp.data))
+
+    def test_delete_song_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            resp = c.delete("/api/songs/11111")
+
+            self.assertEqual(resp.status_code, 401)
