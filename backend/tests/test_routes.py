@@ -141,3 +141,49 @@ class RoutesTestCases(TestCase):
             resp = c.get("/logout", follow_redirects=True)
 
             self.assertIn("Log In", str(resp.data))
+      
+    # Stash Routes
+
+    def test_get_stashes(self):
+        """It should get user's stashes if there's a user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.get("/api/stashes")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("test stash name", str(resp.data))
+
+    def test_get_stashes_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+        
+            resp = c.get("/api/stashes")
+            
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn("Unauthorized", str(resp.data))
+
+    def test_add_stash(self):
+        """It should add a new stash if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            stash_data = {"name":"test add new stash"}
+
+            resp = c.post("/api/stashes", json=stash_data)
+
+            self.assertEqual(resp.status_code, 201)
+            self.assertIn("test add new stash", str(resp.data))
+
+    def test_add_stash_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            stash_data = {"name":"test add new stash"}
+
+            resp = c.post("/api/stashes", json=stash_data)
+
+            self.assertEqual(resp.status_code, 401)
