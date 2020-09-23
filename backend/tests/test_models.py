@@ -6,7 +6,7 @@ from sqlalchemy import exc
 
 from models import db, Annotation, Song, SongAnnotation, Stash, StashSong, User, UserSong, UserStash
 
-os.environ['SQLALCHEMY_DATABASE_URI'] = "postgresql:///songstash_test"
+os.environ['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_TEST_DATABASE_URI']
 
 from app import app
 
@@ -62,7 +62,7 @@ class ModelTestCases(TestCase):
         return res
 
     def test_models(self):
-        """Do basic models work?"""
+        """Do the basic models work?"""
 
         # It should have a user with a song and a stash
         self.assertEqual(len(self.user.stashes), 1)
