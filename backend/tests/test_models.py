@@ -1,5 +1,3 @@
-"""Model Tests"""
-
 import os
 from unittest import TestCase
 from sqlalchemy import exc
@@ -71,10 +69,12 @@ class ModelTestCases(TestCase):
         self.assertEqual(len(self.user.songs), 1)
         self.assertEqual(self.user.songs[0].title, "test title")
 
-        # It should have a stash with a song
+    def test_stash_associations(self):
+        """It should have a stash with a song"""
         self.assertEqual(len(self.stash.songs), 1)
 
-        # It should have a song with an annotation
+    def test_song_associations(self):
+        """It should have a song with an annotation"""
         self.assertEqual(len(self.song.annotations), 1)
         self.assertEqual(self.song.annotations[0].annotation, "test annotation")
 
