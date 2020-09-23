@@ -272,3 +272,62 @@ class RoutesTestCases(TestCase):
             resp = c.delete("/api/stashes/songs/22222/11111")
 
             self.assertEqual(resp.status_code, 401)
+
+    # Song Routes
+
+    def test_get_songs(self):
+        """It should get user's songs if there's a user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.get("/api/songs")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("test title", str(resp.data))
+
+    def test_get_songs_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+        
+            resp = c.get("/api/songs")
+            
+            self.assertEqual(resp.status_code, 401)
+            self.assertIn("Unauthorized", str(resp.data))
+
+    def test_add_song(self):
+        """It should add a new song and association to user if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            song_data = {
+                "title":"new title",
+                "artist":"new artist",
+                "lyrics":"new lyrics",
+            }
+
+            resp = c.post("/api/songs", json=song_data)
+
+            self.assertEqual(resp.status_code, 201)
+            self.assertIn("new title", str(resp.data))
+
+            user = User.query.get(12345)
+
+            self.assertEqual(len(user.songs), 2)
+            self.assertEqual(user.songs[1].title, "new title")
+
+    def test_add_song_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            song_data = {
+                "title":"new title",
+                "artist":"new artist",
+                "lyrics":"new lyrics",
+            }
+
+            resp = c.post("/api/songs", json=song_data)
+
+            self.assertEqual(resp.status_code, 401)
