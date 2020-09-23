@@ -2,6 +2,7 @@ import os
 from unittest import TestCase
 from sqlalchemy import exc
 from dotenv import load_dotenv
+from forms import UserSignupForm, UserLoginForm
 from models import db, Annotation, Song, SongAnnotation, Stash, StashSong, User, UserSong, UserStash
 
 load_dotenv()
@@ -68,6 +69,7 @@ class RoutesTestCases(TestCase):
         """It should render homepage for non-user"""
         with self.client as c:
             resp = c.get("/")
+            
             self.assertIn("Sign Up", str(resp.data))
 
     def test_logged_in_home_route(self):
@@ -77,4 +79,26 @@ class RoutesTestCases(TestCase):
                 sess[CURR_USER_KEY] = self.user.id
 
             resp = c.get("/")
+
+            self.assertIn("You need to enable JavaScript to run this app.", str(resp.data))
+
+    def test_get_signup_page(self):
+        """It should show signup page"""
+        with self.client as c:
+            resp = c.get("/signup")
+
+            self.assertIn("Create Account", str(resp.data))
+
+    def test_user_signup_and_redirect(self):
+        """It should signup user and redirect to app"""
+        with self.client as c:
+            userdata = {
+              "username": "wtform_tester",
+              "password": "password",
+              "confirm": "password"
+            }
+
+            resp = c.post("/signup", data=userdata, follow_redirects=True)
+
+            self.assertEqual(resp.status_code, 200)
             self.assertIn("You need to enable JavaScript to run this app.", str(resp.data))
