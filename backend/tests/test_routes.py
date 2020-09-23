@@ -229,3 +229,46 @@ class RoutesTestCases(TestCase):
             resp = c.delete("/api/stashes/22222")
 
             self.assertEqual(resp.status_code, 401)
+
+    def test_add_song_to_stash(self):
+        """It should add a song to a stash if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            data = {"songId":"11111", "stashId":"22222"}
+
+            resp = c.post("/api/stashes/songs", json=data)
+
+            self.assertEqual(resp.status_code, 201)
+            self.assertIn("stash_song_id", str(resp.data))
+
+    def test_add_song_to_stash_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            data = {"songId":"11111", "stashId":"22222"}
+
+            resp = c.post("/api/stashes/songs", json=data)
+
+            self.assertEqual(resp.status_code, 401)
+
+    def test_delete_song_from_stash(self):
+        """It should delete a song from a stash if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.delete("/api/stashes/songs/22222/11111")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Song deleted from stash", str(resp.data))
+
+    def test_delete_song_from_stash_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+
+            resp = c.delete("/api/stashes/songs/22222/11111")
+
+            self.assertEqual(resp.status_code, 401)
