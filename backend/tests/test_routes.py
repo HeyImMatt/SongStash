@@ -381,3 +381,41 @@ class RoutesTestCases(TestCase):
             resp = c.delete("/api/songs/11111")
 
             self.assertEqual(resp.status_code, 401)
+
+    # Annotation Routes
+
+    def test_add_annotation(self):
+        """It should add a new annotation if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            annotation_data = {
+                "annotation":"Am",
+                "lyric_index":"3",
+                "song_id":"11111",
+            }
+
+            resp = c.post("/api/annotations", json=annotation_data)
+
+            self.assertEqual(resp.status_code, 201)
+            self.assertIn("annotation_id", str(resp.data))
+
+            song = Song.query.get(11111)
+
+            self.assertEqual(len(song.annotations), 2)
+            self.assertEqual(song.annotations[1].annotation, "Am")
+
+    def test_add_annotation_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            annotation_data = {
+                "annotation":"Am",
+                "lyric_index":"3",
+                "song_id":"11111",
+            }
+
+            resp = c.post("/api/annotations", json=annotation_data)
+
+            self.assertEqual(resp.status_code, 401)
