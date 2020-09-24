@@ -419,3 +419,51 @@ class RoutesTestCases(TestCase):
             resp = c.post("/api/annotations", json=annotation_data)
 
             self.assertEqual(resp.status_code, 401)
+
+    def test_edit_annotation(self):
+        """It should edit a annotation if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            annotation_data = {
+                "annotation":"edited annotation",
+                "lyric_index":"9",
+            }
+
+            resp = c.patch("/api/annotations/33333", json=annotation_data)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("33333", str(resp.data))
+
+    def test_edit_annotation_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            annotation_data = {
+                "annotation":"edited annotation",
+                "lyric_index":"9",
+            }
+
+            resp = c.patch("/api/annotations/33333", json=annotation_data)
+
+            self.assertEqual(resp.status_code, 401)
+
+    def test_delete_annotation(self):
+        """It should delete a annotation if user in session"""
+        with self.client as c:
+            with c.session_transaction() as sess:
+                  sess[CURR_USER_KEY] = self.user.id
+                  sess[CURR_USER_NAME] = self.user.username
+
+            resp = c.delete("/api/annotations/33333")
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Annotation deleted", str(resp.data))
+
+    def test_delete_annotation_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            resp = c.delete("/api/annotations/33333")
+
+            self.assertEqual(resp.status_code, 401)
