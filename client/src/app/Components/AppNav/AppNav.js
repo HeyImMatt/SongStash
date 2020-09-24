@@ -24,7 +24,7 @@ export default function AppNav() {
         <Nav navbar pills justified className="mt-0 h-75 w-100">
           <NavItem className="mx-auto mt-0 mb-auto">
             <NavbarText><u>My Stashes</u>  <Link to="/createstash"><AddCircle /></Link></NavbarText>
-            {stashes.map(stash => (<Link to={`/stash/${stash.id}`}><NavLink active={location.pathname === `/stash/${stash.id}`}>{stash.name}</NavLink></Link>))}
+            {stashes && stashes.map(stash => (<Link to={`/stash/${stash.id}`}><NavLink active={location.pathname === `/stash/${stash.id}`}>{stash.name}</NavLink></Link>))}
           </NavItem>
           <hr />
           <NavItem className="mx-auto my-auto">
