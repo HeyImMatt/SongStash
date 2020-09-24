@@ -1,5 +1,6 @@
 import os
 from unittest import TestCase
+from unittest.mock import patch
 from sqlalchemy import exc
 from dotenv import load_dotenv
 from forms import UserSignupForm, UserLoginForm
@@ -465,5 +466,47 @@ class RoutesTestCases(TestCase):
         """It should return 401 if no user in session"""
         with self.client as c:
             resp = c.delete("/api/annotations/33333")
+
+            self.assertEqual(resp.status_code, 401)
+
+    # Search & Lyrics Routes
+
+    # Unsure how to test this route with external api dependency
+
+    # def test_search_for_song(self):
+    #     """It should return 200 if user in session"""
+    #     with self.client as c:
+    #         with c.session_transaction() as sess:
+    #               sess[CURR_USER_KEY] = self.user.id
+    #               sess[CURR_USER_NAME] = self.user.username
+
+    #         resp = c.get("/api/search/test")
+
+    #         self.assertEqual(resp.status_code, 200)
+
+    def test_search_for_song_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            resp = c.get("/api/search/test")
+
+            self.assertEqual(resp.status_code, 401)
+
+    # Unsure how to test this route with external api dependency
+    
+    # def test_return_lyrics(self):
+    #     """It should return 200 if user in session"""
+    #     with self.client as c:
+    #         with c.session_transaction() as sess:
+    #               sess[CURR_USER_KEY] = self.user.id
+    #               sess[CURR_USER_NAME] = self.user.username
+
+    #         resp = c.get("/api/lyrics/86472458")
+
+    #         self.assertEqual(resp.status_code, 200)
+
+    def test_return_lyrics_unauthorized(self):
+        """It should return 401 if no user in session"""
+        with self.client as c:
+            resp = c.get("/api/lyrics/86472458")
 
             self.assertEqual(resp.status_code, 401)
