@@ -150,7 +150,7 @@ def add_stash():
         except:
             return make_response(jsonify({"message":"Error adding stash"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/stashes/<int:id>', methods=['PATCH'])
 def edit_stash(id):
@@ -170,7 +170,7 @@ def edit_stash(id):
             except:
                 return make_response(jsonify({"message":"Error editing stash"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/stashes/<int:id>', methods=['DELETE'])
 def delete_stash(id):
@@ -189,7 +189,7 @@ def delete_stash(id):
             except:
                 return make_response(jsonify({"message":"Error deleting stash"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/stashes/songs', methods=['POST'])
 def add_song_to_stash():
@@ -212,7 +212,7 @@ def add_song_to_stash():
             except:
                 return make_response(jsonify({"message":"Error adding song to stash"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/stashes/songs/<int:stash_id>/<int:song_id>', methods=['DELETE'])
 def delete_song_from_stash(stash_id, song_id):
@@ -232,7 +232,7 @@ def delete_song_from_stash(stash_id, song_id):
             except:
                 return make_response(jsonify({"message":"Error deleting song from stash"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Song Routes ###
 
@@ -272,7 +272,7 @@ def add_song():
         except:
             return make_response(jsonify({"message":"Error adding song"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/songs/<int:id>', methods=['PATCH'])
 def edit_song(id):
@@ -297,7 +297,7 @@ def edit_song(id):
             except:
                 return make_response(jsonify({"message":"Error editing song"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/songs/<int:id>', methods=['DELETE'])
 def delete_song(id):
@@ -315,7 +315,7 @@ def delete_song(id):
             except:
                 return make_response(jsonify({"message":"Error deleting song"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Annotation Routes ###
 
@@ -341,7 +341,7 @@ def add_annotation():
             except:
                 return make_response(jsonify({"message":"Error adding annotation"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/annotations/<int:id>', methods=['PATCH'])
 def edit_annotation(id):
@@ -364,7 +364,7 @@ def edit_annotation(id):
             except:
                 return make_response(jsonify({"message":"Error editing annotation"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 @app.route('/api/annotations/<int:id>', methods=['DELETE'])
 def delete_annotation(id):
@@ -383,7 +383,7 @@ def delete_annotation(id):
             except:
                 return make_response(jsonify({"message":"Error deleting annotation"}), 400)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Search Routes ###
 
@@ -395,7 +395,7 @@ def search_for_song(q_string):
         results = search_api(q_string)
         return make_response(jsonify(results), 200)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
 
 ### Lyrics Routes ###
 
@@ -407,4 +407,4 @@ def return_lyrics(track_id):
         lyrics = get_song_lyrics(track_id)
         return make_response(jsonify(lyrics), 200)
 
-    return 401
+    return make_response(jsonify({"message":"Unauthorized"}), 401)
