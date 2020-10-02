@@ -58,7 +58,7 @@ def do_logout():
 @app.route('/<path:path>')
 def home_route(path):
     if g.user:
-        return render_template('app.html', flask_token=session[CURR_USER_KEY])
+        return render_template('app.html', username=session[CURR_USER_NAME])
 
     return render_template('index.html')
 
